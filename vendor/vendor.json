@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "kkJ5Y0GWprMPM+DzPPkDHKd7pDo=",
+			"path": "github.com/prometheus/client_golang",
+			"revision": "4675060215e9866ac3e834cfd62ba3fb36b89e12",
+			"revisionTime": "2020-08-25T19:35:43Z"
+		}
+	],
+	"rootPath": "ipmctl-exporter"
+}

@@ -1,0 +1,44 @@
+Prometheus exporter for IPMCTL
+Copyright 2020 Intel Corporation
+
+This product includes software developed at
+Intel Corporation (header files):
+- https://github.com/intel/ipmctl/tree/master/src/os/nvm_api/nvm_management.h
+- https://github.com/intel/ipmctl/tree/master/src/os/nvm_api/nvm_types.h
+- https://github.com/intel/ipmctl/tree/master/src/os/nvm_api/export_api.h
+- https://github.com/intel/ipmctl/tree/master/DcpmPkg/common/NvmSharedDefs.h
+SoundCloud Ltd. (http://soundcloud.com/)
+
+
+The following external components are needed for the product:
+
+client_golang (go module)
+https://github.com/prometheus/client_golang
+Copyright 2012-2015 The Prometheus Authors
+Licensed under Apache License 2.0
+https://github.com/prometheus/client_golang/blob/master/LICENSE
+copy at: licenses/Apache_License_2.0.txt
+
+libdaxctl (shared library)
+https://github.com/pmem/ndctl/tree/master/daxctl
+Copyright 2015-2017 Intel Corporation
+Copyright 2005 Andreas Ericsson
+Licensed under GNU Lesser General Public License v2.1
+https://github.com/pmem/ndctl/blob/master/COPYING
+copy at: licenses/LGPL_License_2.1.txt
+
+libndctl (shared library)
+https://github.com/pmem/ndctl/tree/master/ndctl
+Copyright 2015-2017 Intel Corporation
+Copyright 2005 Andreas Ericsson
+Licensed under GNU Lesser General Public License v2.1
+https://github.com/pmem/ndctl/blob/master/COPYING
+copy at: licenses/LGPL_License_2.1.txt
+
+libipmctl (shared library)
+https://github.com/intel/ipmctl
+Copyright 2018 Intel Corporation
+Licensed under BSD 3-clause
+https://github.com/intel/ipmctl/blob/master/LICENSE
+copy at: licenses/BSD_3_Clause_License.txt
+

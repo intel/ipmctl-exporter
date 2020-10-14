@@ -1,0 +1,11 @@
+prefix=ABSULUTE_PATH_TO_SRC_DIR
+exec_prefix=${prefix}
+libdir=${prefix}/lib/lin_x64
+includedir=${prefix}/collector/nvm/include
+
+
+Name: libipmctl
+Description: An Application Programming Interface (API) library for managing DCPMMs
+Version: 1.0.0
+Libs: -L${libdir} -lndctl -ldaxctl -lkmod -lipmctl
+Cflags: -I${includedir}

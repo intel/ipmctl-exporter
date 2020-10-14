@@ -1,0 +1,4 @@
+.project
+src/ipmctl_exporter
+vendor/*
+!vendor/vendor.json
