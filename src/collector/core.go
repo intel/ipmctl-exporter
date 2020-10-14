@@ -218,7 +218,6 @@ func addMetric(ch chan<- prometheus.Metric,
 // be marked as "Counter" even if it isn't persistent through the AC cycle, like
 // for instance upTime metric.
 func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
-    nvm.Init()
     healthReadings, _ := nvm.GetHealth()
     addMetric(ch, collector.health, prometheus.GaugeValue, healthReadings)
     mediaTemperatureReadings, _ := nvm.GetMediaTemperature()
@@ -297,10 +296,14 @@ func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
         prLowerNoncriticalThreshold, _ := nvm.GetPRLowerNoncriticalThreshold()
         addMetric(ch, collector.prLowerNoncriticalThreshold, prometheus.GaugeValue, prLowerNoncriticalThreshold)
     }
+}
+
+func Stop() {
     nvm.Uninit()
 }
 
 func Run(port string, thresholds_enable bool) {
+    nvm.Init()
     ipmctlCollector := newIpmctlCollector(thresholds_enable)
     prometheus.MustRegister(ipmctlCollector)
     http.Handle("/metrics", promhttp.Handler())
