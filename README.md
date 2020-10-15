@@ -1,7 +1,7 @@
-# IPMCTL (Intel Optane Persistent Memory Controller) exporter
+# Intel® Optane™ Persistent Memory Controller Exporter
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
-IPMCTL exporter is a utility for exposing health and performance
+Intel® Optane™ PMCE is a utility for exposing health and performance
 metrics from Intel Optane DC Persistent memory modules (DCPMM) for
 [Prometheus](https://prometheus.io/) (an open source monitoring system).
 Exporter is linking to libipmctl and consume its API. Library is a part of
