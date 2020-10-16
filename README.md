@@ -138,7 +138,7 @@ go build
 
 Referring to the
 [list of default ports](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
-by default ipmclt-exporter serves on port `0.0.0.0:9165` at endpoint `/metrics`,
+by default ipmclt-exporter serves on port `0.0.0.0:9757` at endpoint `/metrics`,
 for more details about the usage type:
 
 ```
