@@ -16,7 +16,11 @@
 package nvm
 
 import (
+    "fmt"
 )
+
+//Variable initialised during build
+var Version string
 
 var DeviceDiscoveryLabelNames = []string {
     "uid",
@@ -65,13 +69,19 @@ var DeviceCapabilitiesLabelNames = []string {
     "app_direct_mode_capable",
 }
 
+var IpmctlExporterLabelNames = []string {
+    "version",
+}
+
 type deviceDiscoveryReading            MetricReading
 type deviceSecurityCapabilitiesReading MetricReading
 type deviceCapabilitiesReading         MetricReading
+type IpmctlExporterReading             MetricReading
 
 type deviceDiscoveryLabels             MetricLabels
 type deviceSecurityCapabilitiesLabels  MetricLabels
 type deviceCapabilitiesLabels          MetricLabels
+type IpmctlExporterLabels              MetricLabels
 
 func (ddl deviceDiscoveryLabels) GetLabelValues() ([]string) {
     return getValuesByName(DeviceDiscoveryLabelNames, MetricLabels(ddl).labels)
@@ -83,6 +93,10 @@ func (dscl deviceSecurityCapabilitiesLabels) GetLabelValues() ([]string) {
 
 func (dcl deviceCapabilitiesLabels) GetLabelValues() ([]string) {
     return getValuesByName(DeviceCapabilitiesLabelNames, MetricLabels(dcl).labels)
+}
+
+func (iel IpmctlExporterLabels) GetLabelValues() ([]string) {
+    return getValuesByName(IpmctlExporterLabelNames, MetricLabels(iel).labels)
 }
 
 func (ddl deviceDiscoveryLabels) GetLabelNames() ([]string) {
@@ -97,6 +111,10 @@ func (dcl deviceCapabilitiesLabels) GetLabelNames() ([]string) {
     return DeviceCapabilitiesLabelNames
 }
 
+func (iel IpmctlExporterLabels) GetLabelNames() ([]string) {
+    return IpmctlExporterLabelNames
+}
+
 func (ddl deviceDiscoveryLabels) addLabel(name string, value string) {
     MetricLabels(ddl).labels[name] = value
 }
@@ -107,6 +125,10 @@ func (dscl deviceSecurityCapabilitiesLabels) addLabel(name string, value string)
 
 func (dcl deviceCapabilitiesLabels) addLabel(name string, value string) {
     MetricLabels(dcl).labels[name] = value
+}
+
+func (iel IpmctlExporterLabels) addLabel(name string, value string) {
+    MetricLabels(iel).labels[name] = value
 }
 
 func newDeviceDiscoveryReading(dimmUID nvmUID,
@@ -140,6 +162,17 @@ func newDeviceCapabilitiesReading(dimmUID nvmUID,
     devCapabilitiesReading.MetricValue = float64(dcValue)
     devCapabilitiesReading.Labels      = deviceCapabilitiesLabels(*newMetricLabels())
     return devCapabilitiesReading
+}
+
+func newIpmctlExporterReading(dimmUID nvmUID,
+                              ieValue nvmUint64) (*IpmctlExporterReading) {
+    ipmctlExpReading := new(IpmctlExporterReading)
+    ipmctlExpReading.DIMMUID     = string(dimmUID)
+    ipmctlExpReading.ReadStatus  = int(0)
+    ipmctlExpReading.MetricType  = uint8(0)
+    ipmctlExpReading.MetricValue = float64(ieValue)
+    ipmctlExpReading.Labels      = IpmctlExporterLabels(*newMetricLabels())
+    return ipmctlExpReading
 }
 
 func GetDeviceDiscoveryInfo() ([]MetricReading, error) {
@@ -259,4 +292,19 @@ func GetDeviceCapabilitiesInfo() ([]MetricReading, error) {
         results[i] = MetricReading(devCapsReading)
     }
     return results, nil
+}
+
+func GetIpmctlExporterInfo() ([]MetricReading, error) {
+    dimmID      := nvmUID("")
+    const ieInfoLabelsCount = 1
+    results := make([]MetricReading, ieInfoLabelsCount)
+    var err error = nil
+    ipmctlExpReading := *newIpmctlExporterReading(dimmID, 0)
+    if len(Version) == 0 {
+        err = fmt.Errorf("Unable to get IPMCTL exporter info")
+    }
+    ipmctlExpReading.MetricValue = 1
+    ipmctlExpReading.Labels.addLabel("version", Version)
+    results[0] = MetricReading(ipmctlExpReading)
+    return results, err
 }

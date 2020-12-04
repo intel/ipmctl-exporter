@@ -17,7 +17,7 @@ import (
 
 type ipmctlCollector struct {
     // internal fields
-    thresholds_enable              bool
+    enableThresholds               bool
     // performance readings
     totalMediaReads                *prometheus.Desc
     totalMediaWrites               *prometheus.Desc
@@ -60,6 +60,7 @@ type ipmctlCollector struct {
     deviceDiscoveryInfo            *prometheus.Desc
     deviceSecurityCapabilitiesInfo *prometheus.Desc
     deviceCapabilitiesInfo         *prometheus.Desc
+    ipmctlExporterInfo             *prometheus.Desc
 }
 
 // Function used to get metrics description.
@@ -69,9 +70,9 @@ type ipmctlCollector struct {
 //   suffixes in metrics
 // - always specify the units you are working with for clarity, units should be plural
 // - don't put the type of the metric in the name such as gauge, counter etc.
-func newIpmctlCollector(thresholds_enable bool) *ipmctlCollector {
+func newIpmctlCollector(enableThresholds bool) *ipmctlCollector {
     collector := new(ipmctlCollector)
-    collector.thresholds_enable               = thresholds_enable
+    collector.enableThresholds                = enableThresholds
     collector.totalMediaReads                 = prometheus.NewDesc("ipmctl_total_media_reads_total",
         "Lifetime number of 64 byte reads from media on the DCPMM", nvm.DevPerformanceLabelNames, nil)
     collector.totalMediaWrites                = prometheus.NewDesc("ipmctl_total_media_writes_total",
@@ -106,7 +107,9 @@ func newIpmctlCollector(thresholds_enable bool) *ipmctlCollector {
         "Describes the security capabilities of a device", nvm.DeviceSecurityCapabilitiesLabelNames, nil)
     collector.deviceCapabilitiesInfo          = prometheus.NewDesc("impctl_device_capabilities_info",
         "Describes the capabilities supported by a DCPMM", nvm.DeviceCapabilitiesLabelNames, nil)
-    if thresholds_enable {
+    collector.ipmctlExporterInfo              = prometheus.NewDesc("ipmctl_info",
+        "Describes ipmctl_exporter info", nvm.IpmctlExporterLabelNames, nil)
+    if enableThresholds {
         collector.mtEnabled                   = prometheus.NewDesc("ipmctl_media_temperature_enabled",
             "Indictes if firmware notifications are enabled when media temperature value is critical", nvm.SettingsLabelNames, nil)
         collector.mtUpperCriticalThreshold    = prometheus.NewDesc("ipmctl_media_temperature_upper_critical_threshold",
@@ -172,7 +175,8 @@ func (collector *ipmctlCollector) Describe(ch chan<- *prometheus.Desc) {
     ch <- collector.deviceDiscoveryInfo
     ch <- collector.deviceSecurityCapabilitiesInfo
     ch <- collector.deviceCapabilitiesInfo
-    if collector.thresholds_enable {
+    ch <- collector.ipmctlExporterInfo
+    if collector.enableThresholds {
         ch <- collector.mtEnabled
         ch <- collector.mtUpperCriticalThreshold
         ch <- collector.mtLowerCriticalThreshold
@@ -252,7 +256,9 @@ func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
     addMetric(ch, collector.deviceSecurityCapabilitiesInfo, prometheus.GaugeValue, deviceSecurityCapabilitiesInfo)
     deviceCapabilitiesInfo, _ := nvm.GetDeviceCapabilitiesInfo()
     addMetric(ch, collector.deviceCapabilitiesInfo, prometheus.GaugeValue, deviceCapabilitiesInfo)
-    if collector.thresholds_enable {
+    ipmctlExporterInfo, _ := nvm.GetIpmctlExporterInfo()
+    addMetric(ch, collector.ipmctlExporterInfo, prometheus.GaugeValue, ipmctlExporterInfo)
+    if collector.enableThresholds {
         mtEnabled, _ := nvm.GetMTEnabled()
         addMetric(ch, collector.mtEnabled, prometheus.GaugeValue, mtEnabled)
         mtUpperCriticalThreshold, _ := nvm.GetMTUpperCriticalThreshold()
@@ -302,9 +308,12 @@ func Stop() {
     nvm.Uninit()
 }
 
-func Run(port string, thresholds_enable bool) {
+var Version string
+
+func Run(port string, enableThresholds bool) {
     nvm.Init()
-    ipmctlCollector := newIpmctlCollector(thresholds_enable)
+    nvm.Version = Version
+    ipmctlCollector := newIpmctlCollector(enableThresholds)
     prometheus.MustRegister(ipmctlCollector)
     http.Handle("/metrics", promhttp.Handler())
     http.Handle("/", promhttp.Handler())

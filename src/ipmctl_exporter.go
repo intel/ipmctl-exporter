@@ -13,19 +13,23 @@ import (
     "github.com/intel/ipmctl_exporter/collector"
 )
 
-func parseCmdArgs() (string, bool){
-    port := flag.String("port", "9757",
+var Version string
+
+func parseCmdArgs() (string, bool, bool) {
+    port := flag.String("port", "9165",
         "Listening port number used by exporter")
-    thresholds_enable := flag.Bool("thresholds-enable", false,
+    enableThresholds := flag.Bool("thresholds-enable", false,
         "Enable media and controller temperature, plus percentage remaining thresholds collection")
+    showVersion := flag.Bool("version", false,
+        "Shows ipmctl_exporter version")
     flag.Parse()
-    return *port, *thresholds_enable
+    return *port, *enableThresholds, *showVersion
 }
 
-func handleSIGINT() () {
+func handleSIGINT() {
     signals := make(chan os.Signal, 1)
     signal.Notify(signals, os.Interrupt)
-    go func(){
+    go func() {
         for sig := range signals {
             collector.Stop()
             fmt.Printf("ipmctl exporter - catch %s, stopping service\n", sig)
@@ -35,8 +39,13 @@ func handleSIGINT() () {
 }
 
 func main() {
-    port, thresholds_enable := parseCmdArgs()
+    port, enableThresholds, showVersion := parseCmdArgs()
+    if showVersion {
+        fmt.Printf("%s\n", Version)
+        os.Exit(0)
+    }
     handleSIGINT()
     fmt.Printf("ipmctl exporter listening on port :%s\n", port)
-    collector.Run(port, thresholds_enable)
+    collector.Version = Version
+    collector.Run(port, enableThresholds)
 }
