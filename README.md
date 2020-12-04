@@ -31,6 +31,7 @@ ipmctl_total_write_requests_total                         | Lifetime number of D
 ipmctl_device_discovery_info                              | Describes the capabilities supported by a DCPMM
 ipmctl_device_security_capabilities_info                  | Describes the security capabilities of a device
 ipmctl_device_discovery_info                              | Describes an enterprise-level view of a device
+ipmctl_exporter_info                                      | Describes ipmctl-exporter information
 
 
 If you would like to add some alerts in Prometheus to get notification after
@@ -91,7 +92,7 @@ sed -i '1c\prefix='`pwd` `pwd`/lib/lin_x64/libipmctl.pc
 
 To proceed with build:
 ```shell
-go build
+go build -ldflags "-X main.Version=`git describe --tags --always`"
 ```
 
 
@@ -118,19 +119,19 @@ choose latest build for Windows OS
 - From [powershell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7)
 command line:
 ```powershell
-$env:PROJECT_DIR="C:\Temp\ipmctl-exporter"
+$env:PROJECT_DIR="C:\\Temp\\ipmctl-exporter"
 git clone https://github.com/intel/ipmctl-exporter.git $env:PROJECT_DIR
 # [!] copy libipmctl.dll to ./ipmctl-exporter/src/lib/win_x64/
-$env:PKG_CONFIG_PATH = $env:PROJECT_DIR + "/src/lib/win_x64/"
+$env:PKG_CONFIG_PATH = $env:PROJECT_DIR + "\\src\\lib\\win_x64\\"
 $env:PATH += ";C:\Go\bin;C:\TDM-GCC-64\bin"
-$x = Get-Content -Path $env:CI_PROJECT_DIR\src\lib\win_x64\libipmctl.pc
-$x[0] = "prefix=" + $env:CI_PROJECT_DIR + "/src/"
-$x | Set-Content -Path $env:CI_PROJECT_DIR\src\lib\win_x64\libipmctl.pc
+$x = Get-Content -Path $env:PROJECT_DIR\\src\\lib\\win_x64\\libipmctl.pc
+$x[0] = "prefix=" + $env:PROJECT_DIR + "\\src\\"
+$x | Set-Content -Path $env:PROJECT_DIR\\src\\lib\\win_x64\\libipmctl.pc
 ```
 
 To proceed with build:
 ```powershell
-go build
+go build -ldflags "-X main.Version=$(git describe --tags --always)"
 ```
 
 
