@@ -8,9 +8,8 @@
  * section of each metric is not a good idea, because some of them may changed
  * during the execution (like for instance fw revision number), that is why
  * these information were exposed as a seperate metrics, were value is always
- * set to "1" ("0" will be set only if for some reasones gathering the
- * data will be impossible). This solution was borrowed from node exporter,
- * and sample useage was introduce here: https://tiantiankan.me/a/5ce42184714c6a22ca1f62f5
+ * set to "1". This solution was borrowed from node exporter, and sample usage 
+ * was introduce here: https://tiantiankan.me/a/5ce42184714c6a22ca1f62f5
  */
 
 package nvm
@@ -175,120 +174,69 @@ func newIpmctlExporterReading(dimmUID nvmUID,
     return ipmctlExpReading
 }
 
-func GetDeviceDiscoveryInfo() ([]MetricReading, error) {
-    dimmID      := nvmUID("")
-    opstat, count, err := GetNumberOfDevices()
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, 1)
-        devDiscoveryReading := *newDeviceDiscoveryReading(dimmID, 0)
-        results[0] = MetricReading(devDiscoveryReading)
-        return results, err
-    }
-    devices := make([]deviceDiscovery, count)
-    opstat, devices, err = GetDevices(count)
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, count)
-        for i:=0; i < int(count); i++ {
-            devDiscoveryReading := *newDeviceDiscoveryReading(dimmID, 0)
-            results[i] = MetricReading(devDiscoveryReading)
-        }
-        return results, err
-    }
-    results := make([]MetricReading, count)
-    for i, dev := range devices {
-        devDiscoveryReading := *newDeviceDiscoveryReading(dimmID, 1)
+func (reader *MetricsReader) GetDeviceDiscoveryInfo() ([]MetricReading, error) {
+    results := make([]MetricReading, reader.deviceCount)
+    for i, dev := range reader.devices {
+        discovery := dev.discovery
+        devDiscoveryReading := *newDeviceDiscoveryReading(dev.uid, 1)
         devDiscoveryReading.Labels.addLabel("uid", string(dev.uid))
-        devDiscoveryReading.Labels.addLabel("physical_id", dev.physicalID.toString(16))
-        devDiscoveryReading.Labels.addLabel("vendor_id", dev.vendorID.toString(16))
-        devDiscoveryReading.Labels.addLabel("device_id", dev.deviceID.toString(16))
-        devDiscoveryReading.Labels.addLabel("revision_id", dev.revisionID.toString(16))
-        devDiscoveryReading.Labels.addLabel("channel_pos", dev.channelPos.toString(16))
-        devDiscoveryReading.Labels.addLabel("channel_id", dev.channelID.toString(16))
-        devDiscoveryReading.Labels.addLabel("memory_controller_id", dev.memoryControllerID.toString(16))
-        devDiscoveryReading.Labels.addLabel("socket_id", dev.socketID.toString(16))
-        devDiscoveryReading.Labels.addLabel("node_controller_id", dev.nodeControllerID.toString(16))
-        devDiscoveryReading.Labels.addLabel("memory_type", getMemoryTypeName(dev.memoryType))
-        devDiscoveryReading.Labels.addLabel("sku", dev.dimmSKU.toString(16))
-        devDiscoveryReading.Labels.addLabel("manufacturer", bytesToString([]nvmUint8(dev.manufacturer)))
-        devDiscoveryReading.Labels.addLabel("serial_number", bytesToString([]nvmUint8(dev.serialNumber)))
-        devDiscoveryReading.Labels.addLabel("subsystem_vendor_id", dev.subsystemVendorID.toString(16))
-        devDiscoveryReading.Labels.addLabel("subsystem_device_id", dev.subsystemDeviceID.toString(16))
-        devDiscoveryReading.Labels.addLabel("subsystem_revision_id", dev.subsystemRevisionID.toString(16))
-        devDiscoveryReading.Labels.addLabel("manufacturing_info_valid", dev.manufacturingInfoValid.toString(10))
-        devDiscoveryReading.Labels.addLabel("manufacturing_location", dev.manufacturingLocation.toString(16))
-        devDiscoveryReading.Labels.addLabel("manufacturing_date", dev.manufacturingDate.toString(10))
-        devDiscoveryReading.Labels.addLabel("part_number", dev.partNumber)
-        devDiscoveryReading.Labels.addLabel("fw_revision", string(dev.fwRevision))
-        devDiscoveryReading.Labels.addLabel("fw_api_version", string(dev.fwAPIVersion))
-        devDiscoveryReading.Labels.addLabel("capacity", dev.capacity.toString(10))
-        devDiscoveryReading.Labels.addLabel("interface_format_codes", uint16ToString(dev.interfaceFormatCodes[:]))
-        devDiscoveryReading.Labels.addLabel("lock_state", getLockstateName(dev.lockState))
-        devDiscoveryReading.Labels.addLabel("manageability", getManageabilityName(dev.manageability))
-        devDiscoveryReading.Labels.addLabel("controller_revision_id", dev.controllerRevisionID.toString(16))
-        devDiscoveryReading.Labels.addLabel("master_passphrase_enabled", dev.masterPassphraseEnabled.toString(10))
+        devDiscoveryReading.Labels.addLabel("physical_id", discovery.physicalID.toString(16))
+        devDiscoveryReading.Labels.addLabel("vendor_id", discovery.vendorID.toString(16))
+        devDiscoveryReading.Labels.addLabel("device_id", discovery.deviceID.toString(16))
+        devDiscoveryReading.Labels.addLabel("revision_id", discovery.revisionID.toString(16))
+        devDiscoveryReading.Labels.addLabel("channel_pos", discovery.channelPos.toString(16))
+        devDiscoveryReading.Labels.addLabel("channel_id", discovery.channelID.toString(16))
+        devDiscoveryReading.Labels.addLabel("memory_controller_id", discovery.memoryControllerID.toString(16))
+        devDiscoveryReading.Labels.addLabel("socket_id", discovery.socketID.toString(16))
+        devDiscoveryReading.Labels.addLabel("node_controller_id", discovery.nodeControllerID.toString(16))
+        devDiscoveryReading.Labels.addLabel("memory_type", getMemoryTypeName(discovery.memoryType))
+        devDiscoveryReading.Labels.addLabel("sku", discovery.dimmSKU.toString(16))
+        devDiscoveryReading.Labels.addLabel("manufacturer", bytesToString([]nvmUint8(discovery.manufacturer)))
+        devDiscoveryReading.Labels.addLabel("serial_number", bytesToString([]nvmUint8(discovery.serialNumber)))
+        devDiscoveryReading.Labels.addLabel("subsystem_vendor_id", discovery.subsystemVendorID.toString(16))
+        devDiscoveryReading.Labels.addLabel("subsystem_device_id", discovery.subsystemDeviceID.toString(16))
+        devDiscoveryReading.Labels.addLabel("subsystem_revision_id", discovery.subsystemRevisionID.toString(16))
+        devDiscoveryReading.Labels.addLabel("manufacturing_info_valid", discovery.manufacturingInfoValid.toString(10))
+        devDiscoveryReading.Labels.addLabel("manufacturing_location", discovery.manufacturingLocation.toString(16))
+        devDiscoveryReading.Labels.addLabel("manufacturing_date", discovery.manufacturingDate.toString(10))
+        devDiscoveryReading.Labels.addLabel("part_number", discovery.partNumber)
+        devDiscoveryReading.Labels.addLabel("fw_revision", string(discovery.fwRevision))
+        devDiscoveryReading.Labels.addLabel("fw_api_version", string(discovery.fwAPIVersion))
+        devDiscoveryReading.Labels.addLabel("capacity", discovery.capacity.toString(10))
+        devDiscoveryReading.Labels.addLabel("interface_format_codes", uint16ToString(discovery.interfaceFormatCodes[:]))
+        devDiscoveryReading.Labels.addLabel("lock_state", getLockstateName(discovery.lockState))
+        devDiscoveryReading.Labels.addLabel("manageability", getManageabilityName(discovery.manageability))
+        devDiscoveryReading.Labels.addLabel("controller_revision_id", discovery.controllerRevisionID.toString(16))
+        devDiscoveryReading.Labels.addLabel("master_passphrase_enabled", discovery.masterPassphraseEnabled.toString(10))
         results[i] = MetricReading(devDiscoveryReading)
     }
     return results, nil
 }
 
-func GetDeviceSecurityCapabilitiesInfo() ([]MetricReading, error) {
-    dimmID      := nvmUID("")
-    opstat, count, err := GetNumberOfDevices()
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, 1)
-        devSecCapReading := *newDeviceSecurityCapabilitiesReading(dimmID, 0)
-        results[0] = MetricReading(devSecCapReading)
-        return results, err
-    }
-    devices := make([]deviceDiscovery, count)
-    opstat, devices, err = GetDevices(count)
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, count)
-        for i:=0; i < int(count); i++ {
-            devSecCapsReading := *newDeviceSecurityCapabilitiesReading(dimmID, 0)
-            results[i] = MetricReading(devSecCapsReading)
-        }
-        return results, err
-    }
-    results := make([]MetricReading, count)
-    for i, dev := range devices {
-        devSecCapsReading := *newDeviceSecurityCapabilitiesReading(dimmID, 1)
+func (reader *MetricsReader) GetDeviceSecurityCapabilitiesInfo() ([]MetricReading, error) {
+    results := make([]MetricReading, reader.deviceCount)
+    for i, dev := range reader.devices {
+        discovery := dev.discovery
+        devSecCapsReading := *newDeviceSecurityCapabilitiesReading(dev.uid, 1)
         devSecCapsReading.Labels.addLabel("uid", string(dev.uid))
-        devSecCapsReading.Labels.addLabel("passphrase_capable", dev.securityCapabilities.passphraseCapable.toString(10))
-        devSecCapsReading.Labels.addLabel("unlock_device_capable", dev.securityCapabilities.unlockDeviceCapable.toString(10))
-        devSecCapsReading.Labels.addLabel("erase_crypto_capable", dev.securityCapabilities.eraseCryptoCapable.toString(10))
-        devSecCapsReading.Labels.addLabel("master_passphrase_capable", dev.securityCapabilities.masterPassphraseCapable.toString(10))
+        devSecCapsReading.Labels.addLabel("passphrase_capable", discovery.securityCapabilities.passphraseCapable.toString(10))
+        devSecCapsReading.Labels.addLabel("unlock_device_capable", discovery.securityCapabilities.unlockDeviceCapable.toString(10))
+        devSecCapsReading.Labels.addLabel("erase_crypto_capable", discovery.securityCapabilities.eraseCryptoCapable.toString(10))
+        devSecCapsReading.Labels.addLabel("master_passphrase_capable", discovery.securityCapabilities.masterPassphraseCapable.toString(10))
         results[i] = MetricReading(devSecCapsReading)
     }
     return results, nil
 }
 
-func GetDeviceCapabilitiesInfo() ([]MetricReading, error) {
-    dimmID      := nvmUID("")
-    opstat, count, err := GetNumberOfDevices()
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, 1)
-        devCapsReading := *newDeviceCapabilitiesReading(dimmID, 0)
-        results[0] = MetricReading(devCapsReading)
-        return results, err
-    }
-    devices := make([]deviceDiscovery, count)
-    opstat, devices, err = GetDevices(count)
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, count)
-        for i:=0; i < int(count); i++ {
-            devCapsReading := *newDeviceCapabilitiesReading(dimmID, 0)
-            results[0] = MetricReading(devCapsReading)
-            return results, err
-        }
-    }
-    results := make([]MetricReading, count)
-    for i, dev := range devices {
-        devCapsReading := *newDeviceCapabilitiesReading(dimmID, 1)
+func (reader *MetricsReader) GetDeviceCapabilitiesInfo() ([]MetricReading, error) {
+    results := make([]MetricReading, reader.deviceCount)
+    for i, dev := range reader.devices {
+        discovery := dev.discovery
+        devCapsReading := *newDeviceCapabilitiesReading(dev.uid, 1)
         devCapsReading.Labels.addLabel("uid", string(dev.uid))
-        devCapsReading.Labels.addLabel("package_sparing_capable", dev.deviceCapabilities.packageSparingCapable.toString(10))
-        devCapsReading.Labels.addLabel("memory_mode_capable", dev.deviceCapabilities.memoryModeCapable.toString(10))
-        devCapsReading.Labels.addLabel("app_direct_mode_capable", dev.deviceCapabilities.appDirectModeCapable.toString(10))
+        devCapsReading.Labels.addLabel("package_sparing_capable", discovery.deviceCapabilities.packageSparingCapable.toString(10))
+        devCapsReading.Labels.addLabel("memory_mode_capable", discovery.deviceCapabilities.memoryModeCapable.toString(10))
+        devCapsReading.Labels.addLabel("app_direct_mode_capable", discovery.deviceCapabilities.appDirectModeCapable.toString(10))
         results[i] = MetricReading(devCapsReading)
     }
     return results, nil

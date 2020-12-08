@@ -65,36 +65,19 @@ func newDevPerformanceReading(dimmUID nvmUID,
     return devPerfReading
 }
 
-func getDevicePerformanceReadings(metricType devPerformanceTypeEnumAttr) ([]MetricReading, error) {
-    dimmID := nvmUID("")
-    opstat, count, err := GetNumberOfDevices()
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, 1)
-        devPerfReading := *newDevPerformanceReading(dimmID, opstat, 0xFF, 0)
-        results[0] = MetricReading(devPerfReading)
-        return results, err
-    }
-    devices := make([]deviceDiscovery, count)
-    opstat, devices, err = GetDevices(count)
-    if nvmStatusCodeEnum.nvmSuccess != opstat {
-        results := make([]MetricReading, count)
-        for i:=0; i < int(count); i++ {
-            devPerfReading := *newDevPerformanceReading(dimmID, opstat, 0xFF, 0)
-            results[i] = MetricReading(devPerfReading)
-        }
-        return results, err
-    }
-    results    := make([]MetricReading, count)
-    for i, dev := range devices {
-        opstat, value, _ := GetDevicePerformance(dev.uid)
+func (reader *MetricsReader) getDevicePerformanceReadings(metricType devPerformanceTypeEnumAttr) ([]MetricReading, error) {
+    results    := make([]MetricReading, reader.deviceCount)
+    for i, dev := range reader.devices {
+        perf := dev.performance
+        opstat := dev.performanceOpstat
         metricValue := nvmUint64(0)
         switch metricType {
-            case devPerformanceTypeEnum.bytesRead:    metricValue = value.bytesRead
-            case devPerformanceTypeEnum.hostReads:    metricValue = value.hostReads
-            case devPerformanceTypeEnum.bytesWritten: metricValue = value.bytesWritten
-            case devPerformanceTypeEnum.hostWrites:   metricValue = value.hostWrites
-            case devPerformanceTypeEnum.blockReads:   metricValue = value.blockReads
-            case devPerformanceTypeEnum.blockWrites:  metricValue = value.blockWrites
+            case devPerformanceTypeEnum.bytesRead:    metricValue = perf.bytesRead
+            case devPerformanceTypeEnum.hostReads:    metricValue = perf.hostReads
+            case devPerformanceTypeEnum.bytesWritten: metricValue = perf.bytesWritten
+            case devPerformanceTypeEnum.hostWrites:   metricValue = perf.hostWrites
+            case devPerformanceTypeEnum.blockReads:   metricValue = perf.blockReads
+            case devPerformanceTypeEnum.blockWrites:  metricValue = perf.blockWrites
         }
         devPerfReading := *newDevPerformanceReading(dev.uid, opstat, metricType, metricValue)
         devPerfReading.Labels.addLabel("uid", string(dev.uid))
@@ -104,49 +87,49 @@ func getDevicePerformanceReadings(metricType devPerformanceTypeEnumAttr) ([]Metr
 }
 
 // Number of 64 byte reads from media on the DCPMM since last AC cycle
-func GetMediaReads() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMediaReads() ([]MetricReading, error) {
     // stubbed - was not exposed by NVM API
     return []MetricReading{}, fmt.Errorf("stubbed")
 }
 
 // Number of 64 byte writes to media on the DCPMM since last AC cycle
-func GetMediaWrites() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMediaWrites() ([]MetricReading, error) {
     // stubbed - was not exposed by NVM API
     return []MetricReading{}, fmt.Errorf("stubbed")
 }
 
 // Number of DDRT read transactions the DCPMM has serviced since last AC cycle
-func GetReadRequests() ([]MetricReading, error) {
+func (reader *MetricsReader) GetReadRequests() ([]MetricReading, error) {
     // stubbed - was not exposed by NVM API
     return []MetricReading{}, fmt.Errorf("stubbed")
 }
 
 // Number of DDRT write transactions the DCPMM has serviced since last AC cycle
-func GetWriteRequest() ([]MetricReading, error) {
+func (reader *MetricsReader) GetWriteRequest() ([]MetricReading, error) {
     // stubbed - was not exposed by NVM API
     return []MetricReading{}, fmt.Errorf("stubbed")
 }
 
 // Lifetime number of 64 byte reads from media on the DCPMM
-func GetTotalMediaReads() ([]MetricReading, error) {
-    metrictType := devPerformanceTypeEnum.bytesRead
-    return getDevicePerformanceReadings(metrictType)
+func (reader *MetricsReader) GetTotalMediaReads() ([]MetricReading, error) {
+    metricType := devPerformanceTypeEnum.bytesRead
+    return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of 64 byte writes to media on the DCPMM
-func GetTotalMediaWrites() ([]MetricReading, error) {
-    metrictType := devPerformanceTypeEnum.bytesWritten
-    return getDevicePerformanceReadings(metrictType)
+func (reader *MetricsReader) GetTotalMediaWrites() ([]MetricReading, error) {
+    metricType := devPerformanceTypeEnum.bytesWritten
+    return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of DDRT read transactions the DCPMM has serviced
-func GetTotalReadRequests() ([]MetricReading, error) {
-    metrictType := devPerformanceTypeEnum.hostReads
-    return getDevicePerformanceReadings(metrictType)
+func (reader *MetricsReader) GetTotalReadRequests() ([]MetricReading, error) {
+    metricType := devPerformanceTypeEnum.hostReads
+    return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of DDRT write transactions the DCPMM has serviced
-func GetTotalWriteRequests() ([]MetricReading, error) {
-    metrictType := devPerformanceTypeEnum.hostWrites
-    return getDevicePerformanceReadings(metrictType)
+func (reader *MetricsReader) GetTotalWriteRequests() ([]MetricReading, error) {
+    metricType := devPerformanceTypeEnum.hostWrites
+    return reader.getDevicePerformanceReadings(metricType)
 }
