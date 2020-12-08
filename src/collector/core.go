@@ -10,12 +10,15 @@ package collector
 
 import (
     "net/http"
+    "fmt"
     "github.com/prometheus/client_golang/prometheus"
     "github.com/prometheus/client_golang/prometheus/promhttp"
     "github.com/intel/ipmctl_exporter/collector/nvm"
 )
 
 type ipmctlCollector struct {
+    // reader
+    metricsReader                  *nvm.MetricsReader
     // internal fields
     enableThresholds               bool
     // performance readings
@@ -72,6 +75,7 @@ type ipmctlCollector struct {
 // - don't put the type of the metric in the name such as gauge, counter etc.
 func newIpmctlCollector(enableThresholds bool) *ipmctlCollector {
     collector := new(ipmctlCollector)
+    collector.metricsReader                   = nvm.NewMetricsReader()
     collector.enableThresholds                = enableThresholds
     collector.totalMediaReads                 = prometheus.NewDesc("ipmctl_total_media_reads_total",
         "Lifetime number of 64 byte reads from media on the DCPMM", nvm.DevPerformanceLabelNames, nil)
@@ -222,84 +226,90 @@ func addMetric(ch chan<- prometheus.Metric,
 // be marked as "Counter" even if it isn't persistent through the AC cycle, like
 // for instance upTime metric.
 func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
-    healthReadings, _ := nvm.GetHealth()
+    reader := collector.metricsReader
+    status, err := reader.GetRequiredReadings()
+    if false == status {
+        fmt.Printf("ipmctl exporter - failed to read PMEM metrics due to: %s\n", err)
+        return
+    }
+    healthReadings, _ := reader.GetHealth()
     addMetric(ch, collector.health, prometheus.GaugeValue, healthReadings)
-    mediaTemperatureReadings, _ := nvm.GetMediaTemperature()
+    mediaTemperatureReadings, _ := reader.GetMediaTemperature()
     addMetric(ch, collector.mediaTemperature, prometheus.GaugeValue, mediaTemperatureReadings)
-    controllerTemperatureReadings, _ := nvm.GetControllerTemperature()
+    controllerTemperatureReadings, _ := reader.GetControllerTemperature()
     addMetric(ch, collector.controllerTemperature, prometheus.GaugeValue, controllerTemperatureReadings)
-    percentageRemainingReadings, _ := nvm.GetPercentageRemaining()
+    percentageRemainingReadings, _ := reader.GetPercentageRemaining()
     addMetric(ch, collector.percentageRemaining, prometheus.GaugeValue, percentageRemainingReadings)
-    LDSCReadings, _ := nvm.GetLatchedDirtyShutdownCount()
+    LDSCReadings, _ := reader.GetLatchedDirtyShutdownCount()
     addMetric(ch, collector.latchedDirtyShutdownCount, prometheus.CounterValue, LDSCReadings)
-    powerOnTimeReadings, _ := nvm.GetPowerOnTime()
+    powerOnTimeReadings, _ := reader.GetPowerOnTime()
     addMetric(ch, collector.powerOnTime, prometheus.CounterValue, powerOnTimeReadings)
-    upTimeReadings, _ := nvm.GetUpTime()
+    upTimeReadings, _ := reader.GetUpTime()
     addMetric(ch, collector.upTime, prometheus.CounterValue, upTimeReadings)
-    powerCyclesReadings, _ := nvm.GetPowerCycles()
+    powerCyclesReadings, _ := reader.GetPowerCycles()
     addMetric(ch, collector.powerCycles, prometheus.CounterValue, powerCyclesReadings)
-    fwErrorCountReadings, _ := nvm.GetFwErrorCount()
+    fwErrorCountReadings, _ := reader.GetFwErrorCount()
     addMetric(ch, collector.fwErrorCount, prometheus.CounterValue, fwErrorCountReadings)
-    UDSCReadings, _ := nvm.GetUnlatchedDirtyShutdownCount()
+    UDSCReadings, _ := reader.GetUnlatchedDirtyShutdownCount()
     addMetric(ch, collector.unlatchedDirtyShutdownCount, prometheus.CounterValue, UDSCReadings)
-    totalMediaReads, _ := nvm.GetTotalMediaReads()
+    totalMediaReads, _ := reader.GetTotalMediaReads()
     addMetric(ch, collector.totalMediaReads, prometheus.CounterValue, totalMediaReads)
-    totalMediaWrites, _ := nvm.GetTotalMediaWrites()
+    totalMediaWrites, _ := reader.GetTotalMediaWrites()
     addMetric(ch, collector.totalMediaWrites, prometheus.CounterValue, totalMediaWrites)
-    totalReadRequests, _ := nvm.GetTotalReadRequests()
+    totalReadRequests, _ := reader.GetTotalReadRequests()
     addMetric(ch, collector.totalReadRequests, prometheus.CounterValue, totalReadRequests)
-    totalWriteRequests, _ := nvm.GetTotalWriteRequests()
+    totalWriteRequests, _ := reader.GetTotalWriteRequests()
     addMetric(ch, collector.totalWriteRequests, prometheus.CounterValue, totalWriteRequests)
-    deviceDiscoveryInfo, _ := nvm.GetDeviceDiscoveryInfo()
+    deviceDiscoveryInfo, _ := reader.GetDeviceDiscoveryInfo()
     addMetric(ch, collector.deviceDiscoveryInfo, prometheus.GaugeValue, deviceDiscoveryInfo)
-    deviceSecurityCapabilitiesInfo, _ := nvm.GetDeviceSecurityCapabilitiesInfo()
+    deviceSecurityCapabilitiesInfo, _ := reader.GetDeviceSecurityCapabilitiesInfo()
     addMetric(ch, collector.deviceSecurityCapabilitiesInfo, prometheus.GaugeValue, deviceSecurityCapabilitiesInfo)
-    deviceCapabilitiesInfo, _ := nvm.GetDeviceCapabilitiesInfo()
+    deviceCapabilitiesInfo, _ := reader.GetDeviceCapabilitiesInfo()
     addMetric(ch, collector.deviceCapabilitiesInfo, prometheus.GaugeValue, deviceCapabilitiesInfo)
     ipmctlExporterInfo, _ := nvm.GetIpmctlExporterInfo()
     addMetric(ch, collector.ipmctlExporterInfo, prometheus.GaugeValue, ipmctlExporterInfo)
     if collector.enableThresholds {
-        mtEnabled, _ := nvm.GetMTEnabled()
+        mtEnabled, _ := reader.GetMTEnabled()
         addMetric(ch, collector.mtEnabled, prometheus.GaugeValue, mtEnabled)
-        mtUpperCriticalThreshold, _ := nvm.GetMTUpperCriticalThreshold()
+        mtUpperCriticalThreshold, _ := reader.GetMTUpperCriticalThreshold()
         addMetric(ch, collector.mtUpperCriticalThreshold, prometheus.GaugeValue, mtUpperCriticalThreshold)
-        mtLowerCriticalThreshold, _ := nvm.GetMTLowerCriticalThreshold()
+        mtLowerCriticalThreshold, _ := reader.GetMTLowerCriticalThreshold()
         addMetric(ch, collector.mtLowerCriticalThreshold, prometheus.GaugeValue, mtLowerCriticalThreshold)
-        mtUpperFatalThreshold, _ := nvm.GetMTUpperFatalThreshold()
+        mtUpperFatalThreshold, _ := reader.GetMTUpperFatalThreshold()
         addMetric(ch, collector.mtUpperFatalThreshold, prometheus.GaugeValue, mtUpperFatalThreshold)
-        mtLowerFatalThreshold, _ := nvm.GetMTLowerFatalThreshold()
+        mtLowerFatalThreshold, _ := reader.GetMTLowerFatalThreshold()
         addMetric(ch, collector.mtLowerFatalThreshold, prometheus.GaugeValue, mtLowerFatalThreshold)
-        mtUpperNoncriticalThreshold, _ := nvm.GetMTUpperNoncriticalThreshold()
+        mtUpperNoncriticalThreshold, _ := reader.GetMTUpperNoncriticalThreshold()
         addMetric(ch, collector.mtUpperNoncriticalThreshold, prometheus.GaugeValue, mtUpperNoncriticalThreshold)
-        mtLowerNoncriticalThreshold, _ := nvm.GetMTLowerNoncriticalThreshold()
+        mtLowerNoncriticalThreshold, _ := reader.GetMTLowerNoncriticalThreshold()
         addMetric(ch, collector.mtLowerNoncriticalThreshold, prometheus.GaugeValue, mtLowerNoncriticalThreshold)
-        ctEnabled, _ := nvm.GetCTEnabled()
+        ctEnabled, _ := reader.GetCTEnabled()
         addMetric(ch, collector.ctEnabled, prometheus.GaugeValue, ctEnabled)
-        ctUpperCriticalThreshold, _ := nvm.GetCTUpperCriticalThreshold()
+        ctUpperCriticalThreshold, _ := reader.GetCTUpperCriticalThreshold()
         addMetric(ch, collector.ctUpperCriticalThreshold, prometheus.GaugeValue, ctUpperCriticalThreshold)
-        ctLowerCriticalThreshold, _ := nvm.GetCTLowerCriticalThreshold()
+        ctLowerCriticalThreshold, _ := reader.GetCTLowerCriticalThreshold()
         addMetric(ch, collector.ctLowerCriticalThreshold, prometheus.GaugeValue, ctLowerCriticalThreshold)
-        ctUpperFatalThreshold, _ := nvm.GetCTUpperFatalThreshold()
+        ctUpperFatalThreshold, _ := reader.GetCTUpperFatalThreshold()
         addMetric(ch, collector.ctUpperFatalThreshold, prometheus.GaugeValue, ctUpperFatalThreshold)
-        ctLowerFatalThreshold, _ := nvm.GetCTLowerFatalThreshold()
+        ctLowerFatalThreshold, _ := reader.GetCTLowerFatalThreshold()
         addMetric(ch, collector.ctLowerFatalThreshold, prometheus.GaugeValue, ctLowerFatalThreshold)
-        ctUpperNoncriticalThreshold, _ := nvm.GetCTUpperNoncriticalThreshold()
+        ctUpperNoncriticalThreshold, _ := reader.GetCTUpperNoncriticalThreshold()
         addMetric(ch, collector.ctUpperNoncriticalThreshold, prometheus.GaugeValue, ctUpperNoncriticalThreshold)
-        ctLowerNoncriticalThreshold, _ := nvm.GetCTLowerNoncriticalThreshold()
+        ctLowerNoncriticalThreshold, _ := reader.GetCTLowerNoncriticalThreshold()
         addMetric(ch, collector.ctLowerNoncriticalThreshold, prometheus.GaugeValue, ctLowerNoncriticalThreshold)
-        prEnabled, _ := nvm.GetPREnabled()
+        prEnabled, _ := reader.GetPREnabled()
         addMetric(ch, collector.prEnabled, prometheus.GaugeValue, prEnabled)
-        prUpperCriticalThreshold, _ := nvm.GetPRUpperCriticalThreshold()
+        prUpperCriticalThreshold, _ := reader.GetPRUpperCriticalThreshold()
         addMetric(ch, collector.prUpperCriticalThreshold, prometheus.GaugeValue, prUpperCriticalThreshold)
-        prLowerCriticalThreshold, _ := nvm.GetPRLowerCriticalThreshold()
+        prLowerCriticalThreshold, _ := reader.GetPRLowerCriticalThreshold()
         addMetric(ch, collector.prLowerCriticalThreshold, prometheus.GaugeValue, prLowerCriticalThreshold)
-        prUpperFatalThreshold, _ := nvm.GetPRUpperFatalThreshold()
+        prUpperFatalThreshold, _ := reader.GetPRUpperFatalThreshold()
         addMetric(ch, collector.prUpperFatalThreshold, prometheus.GaugeValue, prUpperFatalThreshold)
-        prLowerFatalThreshold, _ := nvm.GetPRLowerFatalThreshold()
+        prLowerFatalThreshold, _ := reader.GetPRLowerFatalThreshold()
         addMetric(ch, collector.prLowerFatalThreshold, prometheus.GaugeValue, prLowerFatalThreshold)
-        prUpperNoncriticalThreshold, _ := nvm.GetPRUpperNoncriticalThreshold()
+        prUpperNoncriticalThreshold, _ := reader.GetPRUpperNoncriticalThreshold()
         addMetric(ch, collector.prUpperNoncriticalThreshold, prometheus.GaugeValue, prUpperNoncriticalThreshold)
-        prLowerNoncriticalThreshold, _ := nvm.GetPRLowerNoncriticalThreshold()
+        prLowerNoncriticalThreshold, _ := reader.GetPRLowerNoncriticalThreshold()
         addMetric(ch, collector.prLowerNoncriticalThreshold, prometheus.GaugeValue, prLowerNoncriticalThreshold)
     }
 }
@@ -318,5 +328,8 @@ func Run(port string, enableThresholds bool) {
     http.Handle("/metrics", promhttp.Handler())
     http.Handle("/", promhttp.Handler())
     port = ":" + port
-    http.ListenAndServe(port, nil)
+    if err := http.ListenAndServe(port, nil); err != nil {
+        fmt.Printf("%s\n", err)
+    }
+    
 }
