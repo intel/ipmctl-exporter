@@ -81,18 +81,16 @@ and latest [ipmctl](https://github.com/intel/ipmctl/releases) +
 [ndctl](https://github.com/pmem/ndctl) libraries,
 follow the steps below to prepare you environment for builds:
 ```shell
-dnf install -y git pkg-config gcc golang ndctl-libs libipmctl
-git clone https://github.com/intel/ipmctl-exporter.git
-# [!] copy libdaxctl.so libipmctl.so libndctl.so to ./ipmctl-exporter/src/lib/lin_x64/
-cd ./ipmctl-exporter/src
-export PKG_CONFIG_PATH=`pwd`/lib/lin_x64/
-sed -i '1c\prefix='`pwd` `pwd`/lib/lin_x64/libipmctl.pc
+dnf install -y git cmake pkg-config gcc golang ndctl-libs libipmctl
+git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
+cd ./ipmctl_exporter/src
+cmake -S . -B output
 ```
 
 
 To proceed with build:
 ```shell
-go build -ldflags "-X main.Version=`git describe --tags --always`"
+make -C output
 ```
 
 
@@ -119,19 +117,14 @@ choose latest build for Windows OS
 - From [powershell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7)
 command line:
 ```powershell
-$env:PROJECT_DIR="C:\\Temp\\ipmctl-exporter"
-git clone https://github.com/intel/ipmctl-exporter.git $env:PROJECT_DIR
-# [!] copy libipmctl.dll to ./ipmctl-exporter/src/lib/win_x64/
-$env:PKG_CONFIG_PATH = $env:PROJECT_DIR + "\\src\\lib\\win_x64\\"
-$env:PATH += ";C:\Go\bin;C:\TDM-GCC-64\bin"
-$x = Get-Content -Path $env:PROJECT_DIR\\src\\lib\\win_x64\\libipmctl.pc
-$x[0] = "prefix=" + $env:PROJECT_DIR + "\\src\\"
-$x | Set-Content -Path $env:PROJECT_DIR\\src\\lib\\win_x64\\libipmctl.pc
+git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
+cd ipmctl_exporter\src
+cmake -S . -B output -G "MinGW Makefiles"
 ```
 
 To proceed with build:
 ```powershell
-go build -ldflags "-X main.Version=$(git describe --tags --always)"
+make -C output
 ```
 
 
