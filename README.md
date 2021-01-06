@@ -76,7 +76,8 @@ For Linux we highly recommend:
 **Fedora 29/30 (Workstation Edition) x64** with installed
 latest [golang](https://golang.org/) compiler,
 latest [pkg-config](http://pkg-config.freedesktop.org/),
-latest [GCC](https://gcc.gnu.org/)
+latest [GCC](https://gcc.gnu.org/),
+latest [cmake](https://cmake.org/download/),
 and latest [ipmctl](https://github.com/intel/ipmctl/releases) +
 [ndctl](https://github.com/pmem/ndctl) libraries,
 follow the steps below to prepare you environment for builds:
@@ -90,6 +91,7 @@ cmake -S . -B output
 
 To proceed with build:
 ```shell
+export PKG_CONFIG_PATH=`pwd`/output/
 make -C output
 ```
 
@@ -99,7 +101,8 @@ For Windows we highly recommend:
 **Windows Server 2016 Standard x64** with installed latest
 [golang](https://golang.org/) compiler,
 latest [pkg-config](http://pkg-config.freedesktop.org/),
-latest [TDM64-GCC](https://jmeubank.github.io/tdm-gcc/)
+latest [TDM64-GCC](https://jmeubank.github.io/tdm-gcc/),
+latest [cmake](https://cmake.org/download/),
 and latest [ipmctl](https://github.com/intel/ipmctl/releases) library,
 follow the steps below to prepare you environment for builds:
 - Install **golang**
@@ -111,11 +114,13 @@ to `C:\TDM-GCC-64` directory
 - Install **pkgconfiglite**
 from [here](https://sourceforge.net/projects/pkgconfiglite/files/)
 to `C:\TDM-GCC-64\bin` directory
+- Install **cmake**
+from [here](https://cmake.org/download/)
+to `C:\Program Files\CMake` directory
 - Install **ipmctl library**
-from: [here](https://github.com/intel/ipmctl/releases)
+from [here](https://github.com/intel/ipmctl/releases)
 choose latest build for Windows OS
-- From [powershell](https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7)
-command line:
+- From cmd.exe:
 ```powershell
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
 cd ipmctl_exporter\src
@@ -124,7 +129,8 @@ cmake -S . -B output -G "MinGW Makefiles"
 
 To proceed with build:
 ```powershell
-make -C output
+set PKG_CONFIG_PATH=%cd%\output\
+mingw32-make -C output
 ```
 
 
