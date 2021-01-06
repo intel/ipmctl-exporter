@@ -119,10 +119,10 @@ elseif(WIN32)
     find_package(PkgConfig REQUIRED)
 
     FILE(GLOB BUILD_DEPS
-        $ENV{PMM_HOME}/export_api.h
-        $ENV{PMM_HOME}/nvm_management.h
-        $ENV{PMM_HOME}/nvm_types.h
-        $ENV{PMM_HOME}/NvmSharedDefs.h
+        ${ROOT}/collector/nvm/include/export_api.h
+        ${ROOT}/collector/nvm/include/nvm_management.h
+        ${ROOT}/collector/nvm/include/nvm_types.h
+        ${ROOT}/collector/nvm/include/NvmSharedDefs.h
         $ENV{PMM_HOME}/libipmctl.dll)
 
     FILE(COPY ${BUILD_DEPS}
