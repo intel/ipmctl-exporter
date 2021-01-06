@@ -13,7 +13,7 @@
 
 #include <stddef.h>
 #include <limits.h>
-#include <NvmSharedDefs.h>
+#include "NvmSharedDefs.h"
 
 #ifdef _MSC_VER
 #include <stdlib.h>
