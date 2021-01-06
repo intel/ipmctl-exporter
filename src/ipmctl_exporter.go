@@ -16,7 +16,7 @@ import (
 var Version string
 
 func parseCmdArgs() (string, bool, bool) {
-    port := flag.String("port", "9165",
+    port := flag.String("port", "9757",
         "Listening port number used by exporter")
     enableThresholds := flag.Bool("thresholds-enable", false,
         "Enable media and controller temperature, plus percentage remaining thresholds collection")
