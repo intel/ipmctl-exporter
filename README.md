@@ -80,7 +80,7 @@ latest [GCC](https://gcc.gnu.org/),
 latest [cmake](https://cmake.org/download/),
 and latest [ipmctl](https://github.com/intel/ipmctl/releases) +
 [ndctl](https://github.com/pmem/ndctl) libraries,
-follow the steps below to prepare you environment for builds:
+follow the steps below to prepare your environment for builds:
 ```shell
 dnf install -y git cmake pkg-config gcc golang ndctl-libs libipmctl
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
@@ -104,7 +104,7 @@ latest [pkg-config](http://pkg-config.freedesktop.org/),
 latest [TDM64-GCC](https://jmeubank.github.io/tdm-gcc/),
 latest [cmake](https://cmake.org/download/),
 and latest [ipmctl](https://github.com/intel/ipmctl/releases) library,
-follow the steps below to prepare you environment for builds:
+follow the steps below to prepare your environment for builds:
 - Install **golang**
 from [here](https://golang.org/doc/install?download=go1.14.4.windows-amd64.msi)
 to `C:\Go` directory
@@ -121,6 +121,10 @@ to `C:\Program Files\CMake` directory
 from [here](https://github.com/intel/ipmctl/releases)
 choose latest build for Windows OS
 - From cmd.exe:
+---
+**NOTE**
+Attention: please avoid whitespaces for git repository directory, some Windows OSes may face issues with parsing such paths.
+---
 ```powershell
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
 cd ipmctl_exporter\src
