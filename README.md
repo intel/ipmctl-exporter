@@ -122,8 +122,10 @@ from [here](https://github.com/intel/ipmctl/releases)
 choose latest build for Windows OS
 - From cmd.exe:
 ---
-**NOTE**
-Attention: please avoid whitespaces for git repository directory, some Windows OSes may face issues with parsing such paths.
+**Attention:**
+
+Please avoid whitespaces for git repository directory, some Windows OSes may face issues with parsing such paths.
+
 ---
 ```powershell
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
