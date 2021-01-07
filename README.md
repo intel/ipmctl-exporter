@@ -122,7 +122,7 @@ from [here](https://github.com/intel/ipmctl/releases)
 choose latest build for Windows OS
 - From cmd.exe:
 ---
-**Attention: **
+**Attention:** 
 Please avoid whitespaces for git repository directory, some Windows OSes may face issues with parsing such paths.
 
 ---
