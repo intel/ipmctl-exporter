@@ -73,7 +73,7 @@ under different Operating Systems.
 
 For Linux we highly recommend:
 
-**Fedora 29/30 (Workstation Edition) x64** with installed
+**Fedora greater than 29 (Workstation Edition) x64** with installed
 latest [golang](https://golang.org/) compiler,
 latest [pkg-config](http://pkg-config.freedesktop.org/),
 latest [GCC](https://gcc.gnu.org/),
@@ -98,7 +98,7 @@ make -C output
 
 For Windows we highly recommend:
 
-**Windows Server 2016 Standard x64** with installed latest
+**Windows Server 2016 Standard or Windows 7/8/8.1/10 x64** with installed latest
 [golang](https://golang.org/) compiler,
 latest [pkg-config](http://pkg-config.freedesktop.org/),
 latest [TDM64-GCC](https://jmeubank.github.io/tdm-gcc/),
