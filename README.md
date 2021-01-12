@@ -84,7 +84,7 @@ follow the steps below to prepare your environment for builds:
 ```shell
 dnf install -y git cmake pkg-config gcc golang ndctl-libs libipmctl
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
-cd ./ipmctl_exporter/src
+cd ./ipmctl_exporter
 cmake -S . -B output
 ```
 
@@ -128,7 +128,7 @@ Please avoid whitespaces for git repository directory, some Windows OSes may fac
 ---
 ```powershell
 git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
-cd ipmctl_exporter\src
+cd ipmctl_exporter
 cmake -S . -B output -G "MinGW Makefiles"
 ```
 

@@ -1,0 +1,10 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_FULL_BINDIR@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: libipmctl
+Description: An Application Programming Interface (API) library for managing DCPMMs
+Version: @IPMCTL_EXPORTER_VERSION_STRING@
+Libs: -L${libdir} -lndctl -ldaxctl -lkmod -lipmctl
+Cflags: -I${includedir}
