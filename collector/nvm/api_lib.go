@@ -1,7 +1,7 @@
 // +build cgo
 
 /**
- * Copyright (c) 2020, Intel Corporation.
+ * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
  * This package introduce wrapper for ipmctl library written in C.
@@ -19,17 +19,18 @@ package nvm
 import "C"
 import (
     "fmt"
+    log "github.com/sirupsen/logrus"
 )
 
 // libipmctl initialiation method
 func Init() (bool, error) {
     if isLibInitialized {
-        fmt.Printf("libipmctl was already initialized, nothing to be done\n")
+        log.Info("libipmctl was already initialized, nothing to be done")
         return true, nil
     }
     opstat := C.nvm_init()
     if C.NVM_SUCCESS != opstat {
-        fmt.Printf("libipmctl initialization failed with status: %d\n", opstat)
+        log.Error("libipmctl initialization failed with status:", opstat)
         return false, fmt.Errorf("libipmctl initialization failed with status: %d", opstat)
     }
     isLibInitialized = true
@@ -39,7 +40,7 @@ func Init() (bool, error) {
 // libipmctl un-initialization method
 func Uninit() (bool, error) {
     if !isLibInitialized {
-        fmt.Printf("libipmctl was not initialized, nothing to be done\n")
+        log.Warn("libipmctl was not initialized, nothing to be done")
         return true, nil
     }
     C.nvm_uninit()

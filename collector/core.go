@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2020, Intel Corporation.
+ * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
  * Collector package contains all definitions required by Prometheus exporter
@@ -10,10 +10,10 @@ package collector
 
 import (
     "net/http"
-    "fmt"
     "github.com/prometheus/client_golang/prometheus"
     "github.com/prometheus/client_golang/prometheus/promhttp"
     "github.com/intel/ipmctl_exporter/collector/nvm"
+    log "github.com/sirupsen/logrus"
 )
 
 type ipmctlCollector struct {
@@ -229,7 +229,7 @@ func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
     reader := collector.metricsReader
     status, err := reader.GetRequiredReadings()
     if false == status {
-        fmt.Printf("ipmctl exporter - failed to read PMEM metrics due to: %s\n", err)
+        log.Error("ipmctl exporter - failed to read PMEM metrics due to: ", err)
         return
     }
     healthReadings, _ := reader.GetHealth()
@@ -329,7 +329,7 @@ func Run(port string, enableThresholds bool) {
     http.Handle("/", promhttp.Handler())
     port = ":" + port
     if err := http.ListenAndServe(port, nil); err != nil {
-        fmt.Printf("%s\n", err)
+        log.Error(err)
     }
     
 }
