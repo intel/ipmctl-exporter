@@ -65,7 +65,7 @@ func newDevPerformanceReading(dimmUID nvmUID,
 	return devPerfReading
 }
 
-func (reader *MetricsReader) getDevicePerformanceReadings(metricType devPerformanceTypeEnumAttr) ([]MetricReading, error) {
+func (reader *MetricsReader) getDevicePerformanceReadings(metricType devPerformanceTypeEnumAttr) []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		perf := dev.performance
@@ -89,7 +89,7 @@ func (reader *MetricsReader) getDevicePerformanceReadings(metricType devPerforma
 		devPerfReading.Labels.addLabel("uid", string(dev.uid))
 		results[i] = MetricReading(devPerfReading)
 	}
-	return results, nil
+	return results
 }
 
 // Number of 64 byte reads from media on the DCPMM since last AC cycle
@@ -117,25 +117,25 @@ func (reader *MetricsReader) GetWriteRequest() ([]MetricReading, error) {
 }
 
 // Lifetime number of 64 byte reads from media on the DCPMM
-func (reader *MetricsReader) GetTotalMediaReads() ([]MetricReading, error) {
+func (reader *MetricsReader) GetTotalMediaReads() []MetricReading {
 	metricType := devPerformanceTypeEnum.bytesRead
 	return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of 64 byte writes to media on the DCPMM
-func (reader *MetricsReader) GetTotalMediaWrites() ([]MetricReading, error) {
+func (reader *MetricsReader) GetTotalMediaWrites() []MetricReading {
 	metricType := devPerformanceTypeEnum.bytesWritten
 	return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of DDRT read transactions the DCPMM has serviced
-func (reader *MetricsReader) GetTotalReadRequests() ([]MetricReading, error) {
+func (reader *MetricsReader) GetTotalReadRequests() []MetricReading {
 	metricType := devPerformanceTypeEnum.hostReads
 	return reader.getDevicePerformanceReadings(metricType)
 }
 
 // Lifetime number of DDRT write transactions the DCPMM has serviced
-func (reader *MetricsReader) GetTotalWriteRequests() ([]MetricReading, error) {
+func (reader *MetricsReader) GetTotalWriteRequests() []MetricReading {
 	metricType := devPerformanceTypeEnum.hostWrites
 	return reader.getDevicePerformanceReadings(metricType)
 }

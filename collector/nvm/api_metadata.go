@@ -174,7 +174,7 @@ func newIpmctlExporterReading(dimmUID nvmUID,
 	return ipmctlExpReading
 }
 
-func (reader *MetricsReader) GetDeviceDiscoveryInfo() ([]MetricReading, error) {
+func (reader *MetricsReader) GetDeviceDiscoveryInfo() []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		discovery := dev.discovery
@@ -210,10 +210,10 @@ func (reader *MetricsReader) GetDeviceDiscoveryInfo() ([]MetricReading, error) {
 		devDiscoveryReading.Labels.addLabel("master_passphrase_enabled", discovery.masterPassphraseEnabled.toString(10))
 		results[i] = MetricReading(devDiscoveryReading)
 	}
-	return results, nil
+	return results
 }
 
-func (reader *MetricsReader) GetDeviceSecurityCapabilitiesInfo() ([]MetricReading, error) {
+func (reader *MetricsReader) GetDeviceSecurityCapabilitiesInfo() []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		discovery := dev.discovery
@@ -225,10 +225,10 @@ func (reader *MetricsReader) GetDeviceSecurityCapabilitiesInfo() ([]MetricReadin
 		devSecCapsReading.Labels.addLabel("master_passphrase_capable", discovery.securityCapabilities.masterPassphraseCapable.toString(10))
 		results[i] = MetricReading(devSecCapsReading)
 	}
-	return results, nil
+	return results
 }
 
-func (reader *MetricsReader) GetDeviceCapabilitiesInfo() ([]MetricReading, error) {
+func (reader *MetricsReader) GetDeviceCapabilitiesInfo() []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		discovery := dev.discovery
@@ -239,7 +239,7 @@ func (reader *MetricsReader) GetDeviceCapabilitiesInfo() ([]MetricReading, error
 		devCapsReading.Labels.addLabel("app_direct_mode_capable", discovery.deviceCapabilities.appDirectModeCapable.toString(10))
 		results[i] = MetricReading(devCapsReading)
 	}
-	return results, nil
+	return results
 }
 
 func GetIpmctlExporterInfo() ([]MetricReading, error) {

@@ -64,7 +64,7 @@ func newSensorSettingsReading(dimmUID nvmUID,
 }
 
 func (reader *MetricsReader) getSensorSettingsReadings(sensorType sensorTypeEnumAttr,
-	sensorSettingType sensorSettingTypeEnumAttr) ([]MetricReading, error) {
+	sensorSettingType sensorSettingTypeEnumAttr) []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		sensor := dev.sensors[sensorType]
@@ -90,54 +90,54 @@ func (reader *MetricsReader) getSensorSettingsReadings(sensorType sensorTypeEnum
 		senSettingsReading.Labels.addLabel("uid", string(dev.uid))
 		results[i] = MetricReading(senSettingsReading)
 	}
-	return results, nil
+	return results
 }
 
 // Indictes if firmware notifications are enabled when media temperature sensor
 // value is critical
-func (reader *MetricsReader) GetMTEnabled() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTEnabled() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.enabled
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper media temperature critical threshold
-func (reader *MetricsReader) GetMTUpperCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTUpperCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower media temperature critical threshold
-func (reader *MetricsReader) GetMTLowerCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTLowerCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper media temperature fatal threshold
-func (reader *MetricsReader) GetMTUpperFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTUpperFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower media temperature fatal threshold
-func (reader *MetricsReader) GetMTLowerFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTLowerFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper media temperature noncritical threshold
-func (reader *MetricsReader) GetMTUpperNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTUpperNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower media temperature noncritical threshold
-func (reader *MetricsReader) GetMTLowerNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMTLowerNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
@@ -145,49 +145,49 @@ func (reader *MetricsReader) GetMTLowerNoncriticalThreshold() ([]MetricReading, 
 
 // Indictes if firmware notifications are enabled when controller temperature sensor
 // value is critical
-func (reader *MetricsReader) GetCTEnabled() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTEnabled() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.enabled
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper controller temperature critical threshold
-func (reader *MetricsReader) GetCTUpperCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTUpperCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower controller temperature critical threshold
-func (reader *MetricsReader) GetCTLowerCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTLowerCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper controller temperature fatal threshold
-func (reader *MetricsReader) GetCTUpperFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTUpperFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower controller temperature fatal threshold
-func (reader *MetricsReader) GetCTLowerFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTLowerFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper controller temperature noncritical threshold
-func (reader *MetricsReader) GetCTUpperNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTUpperNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.upperNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower controller temperature noncritical threshold
-func (reader *MetricsReader) GetCTLowerNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetCTLowerNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	sensorSettingType := sensorSettingTypeEnum.lowerNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
@@ -195,49 +195,49 @@ func (reader *MetricsReader) GetCTLowerNoncriticalThreshold() ([]MetricReading, 
 
 // Indictes if firmware notifications are enabled when percentage remaining
 // value is critical
-func (reader *MetricsReader) GetPREnabled() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPREnabled() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.enabled
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper percentage remaining critical threshold
-func (reader *MetricsReader) GetPRUpperCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRUpperCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.upperCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower percentage remaining critical threshold
-func (reader *MetricsReader) GetPRLowerCriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRLowerCriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.lowerCriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper percentage remaining fatal threshold
-func (reader *MetricsReader) GetPRUpperFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRUpperFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.upperFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower percentage remaining fatal threshold
-func (reader *MetricsReader) GetPRLowerFatalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRLowerFatalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.lowerFatalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The upper percentage remaining noncritical threshold
-func (reader *MetricsReader) GetPRUpperNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRUpperNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.upperNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)
 }
 
 // The lower percentage remaining noncritical threshold
-func (reader *MetricsReader) GetPRLowerNoncriticalThreshold() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPRLowerNoncriticalThreshold() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	sensorSettingType := sensorSettingTypeEnum.lowerNoncriticalThreshold
 	return reader.getSensorSettingsReadings(sensorType, sensorSettingType)

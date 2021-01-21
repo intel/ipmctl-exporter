@@ -41,7 +41,7 @@ func newSensorReading(dimmUID nvmUID,
 	return sensorReading
 }
 
-func (reader *MetricsReader) getSensorReadings(sensorType sensorTypeEnumAttr) ([]MetricReading, error) {
+func (reader *MetricsReader) getSensorReadings(sensorType sensorTypeEnumAttr) []MetricReading {
 	results := make([]MetricReading, reader.deviceCount)
 	for i, dev := range reader.devices {
 		sensor := dev.sensors[sensorType]
@@ -50,65 +50,65 @@ func (reader *MetricsReader) getSensorReadings(sensorType sensorTypeEnumAttr) ([
 		sensorReading.Labels.addLabel("uid", string(dev.uid))
 		results[i] = MetricReading(sensorReading)
 	}
-	return results, nil
+	return results
 }
 
 // DCPMM health as reported in the SMART log
-func (reader *MetricsReader) GetHealth() ([]MetricReading, error) {
+func (reader *MetricsReader) GetHealth() []MetricReading {
 	sensorType := sensorTypeEnum.sensorHealth
 	return reader.getSensorReadings(sensorType)
 }
 
 // Device media temperature in degrees Celsius
-func (reader *MetricsReader) GetMediaTemperature() ([]MetricReading, error) {
+func (reader *MetricsReader) GetMediaTemperature() []MetricReading {
 	sensorType := sensorTypeEnum.sensorMediaTemperature
 	return reader.getSensorReadings(sensorType)
 }
 
 // Device media temperature in degrees Celsius
-func (reader *MetricsReader) GetControllerTemperature() ([]MetricReading, error) {
+func (reader *MetricsReader) GetControllerTemperature() []MetricReading {
 	sensorType := sensorTypeEnum.sensorControllerTemperature
 	return reader.getSensorReadings(sensorType)
 }
 
 // Amount of percentage remaining as a percentage
-func (reader *MetricsReader) GetPercentageRemaining() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPercentageRemaining() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPercentageRemaining
 	return reader.getSensorReadings(sensorType)
 }
 
 // Device shutdowns without notification
-func (reader *MetricsReader) GetLatchedDirtyShutdownCount() ([]MetricReading, error) {
+func (reader *MetricsReader) GetLatchedDirtyShutdownCount() []MetricReading {
 	sensorType := sensorTypeEnum.sensorLatchedDirtyShutdownCount
 	return reader.getSensorReadings(sensorType)
 }
 
 // Total power-on time over the lifetime of the device
-func (reader *MetricsReader) GetPowerOnTime() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPowerOnTime() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPowerontime
 	return reader.getSensorReadings(sensorType)
 }
 
 // Total power-on time since the last power cycle of the device
-func (reader *MetricsReader) GetUpTime() ([]MetricReading, error) {
+func (reader *MetricsReader) GetUpTime() []MetricReading {
 	sensorType := sensorTypeEnum.sensorUptime
 	return reader.getSensorReadings(sensorType)
 }
 
 // Number of power cycles over the lifetime of the device
-func (reader *MetricsReader) GetPowerCycles() ([]MetricReading, error) {
+func (reader *MetricsReader) GetPowerCycles() []MetricReading {
 	sensorType := sensorTypeEnum.sensorPowerCycles
 	return reader.getSensorReadings(sensorType)
 }
 
 // The total number of firmware error log entries
-func (reader *MetricsReader) GetFwErrorCount() ([]MetricReading, error) {
+func (reader *MetricsReader) GetFwErrorCount() []MetricReading {
 	sensorType := sensorTypeEnum.sensorFWerrorlogcount
 	return reader.getSensorReadings(sensorType)
 }
 
 // Number of times that the FW received an unexpected power loss
-func (reader *MetricsReader) GetUnlatchedDirtyShutdownCount() ([]MetricReading, error) {
+func (reader *MetricsReader) GetUnlatchedDirtyShutdownCount() []MetricReading {
 	sensorType := sensorTypeEnum.sensorUnlachedDirtyShutdownCount
 	return reader.getSensorReadings(sensorType)
 }
