@@ -15,14 +15,14 @@ basic set: `# sudo ./ipmctl_exporter`
 Name                                                      | Description
 ----------------------------------------------------------|-------------
 ipmctl_health                                             | DCPMM health as reported in the SMART log
-ipmctl_media_temperature_degrees_c                        | Device media temperature in degrees Celsius
-ipmctl_controller_temperature_degrees_c                   | Device media temperature in degrees Celsius
-ipmctl_percentage_remaining                               | Amount of percentage remaining as a percentage
+ipmctl_media_temperature_celsius                          | Device media temperature in degrees Celsius
+ipmctl_controller_temperature_celsius                     | Device media temperature in degrees Celsius
+ipmctl_lifespan_percentage_remaining                      | Amount of lifespan remaining as a percentage
 ipmctl_latched_dirty_shutdown_count_total                 | Device shutdowns without notification
-ipmctl_power_on_time_total                                | Total power-on time over the lifetime of the device
+ipmctl_power_on_time_seconds_total                        | Total power-on time over the lifetime of the device
 ipmctl_up_time_seconds_total                              | Total power-on time since the last power cycle of the device
 ipmctl_power_cycles_total                                 | Number of power cycles over the lifetime of the device
-ipmctl_fw_error_count_total                               | The total number of firmware error log entries
+ipmctl_fw_error_total                                     | The total number of firmware error log entries
 ipmctl_unlatched_dirty_shutdown_count_total               | Number of times that the FW received an unexpected power loss
 ipmctl_total_media_reads_total                            | Lifetime number of 64 byte reads from media on the DCPMM
 ipmctl_total_media_writes_total                           | Lifetime number of 64 byte writes to media on the DCPMM
@@ -31,7 +31,6 @@ ipmctl_total_write_requests_total                         | Lifetime number of D
 ipmctl_device_discovery_info                              | Describes the capabilities supported by a DCPMM
 ipmctl_device_security_capabilities_info                  | Describes the security capabilities of a device
 ipmctl_device_discovery_info                              | Describes an enterprise-level view of a device
-ipmctl_exporter_info                                      | Describes ipmctl-exporter information
 
 
 If you would like to add some alerts in Prometheus to get notification after
@@ -39,30 +38,75 @@ reaching some configured thresholds, you may enable it as well (these are
 disabled by default) to do it try:
 `# sudo ./ipmctl_exporter --enable-thresholds`
 
+Name                                                              | Description
+------------------------------------------------------------------|-------------
+ipmctl_media_temperature_enabled                                  | Indictes if firmware notifications are enabled when media temperature value is critical
+ipmctl_media_temperature_upper_critical_threshold_celsius         | The upper media temperature critical threshold
+ipmctl_media_temperature_lower_critical_threshold_celsius         | The lower media temperature critical threshold
+ipmctl_media_temperature_upper_fatal_threshold_celsius            | The upper media temperature fatal threshold
+ipmctl_media_temperature_lower_fatal_threshold_celsius            | The lower media temperature fatal threshold
+ipmctl_media_temperature_upper_noncritical_threshold_celsius      | The upper media temperature noncritical threshold
+ipmctl_media_temperature_lower_noncritical_threshold_celsius      | The lower media temperature noncritical threshold
+ipmctl_controller_temperature_enabled                             | Indictes if firmware notifications are enabled when controller temperature value is critical
+ipmctl_controller_temperature_upper_critical_threshold_celsius    | The upper controller temperature critical threshold
+ipmctl_controller_temperature_lower_critical_threshold_celsius    | The lower controller temperature critical threshold
+ipmctl_controller_temperature_upper_fatal_threshold_celsius       | The upper controller temperature fatal threshold
+ipmctl_controller_temperature_lower_fatal_threshold_celsius       | The lower controller temperature fatal threshold
+ipmctl_controller_temperature_upper_noncritical_threshold_celsius | The upper controller temperature noncritical threshold
+ipmctl_controller_temperature_lower_noncritical_threshold_celsius | The lower controller temperature noncritical threshold
+ipmctl_lifespan_percentage_remaining_enabled                      | Indictes if firmware notifications are enabled when lifespan percentage remaining value is critical
+ipmctl_lifespan_percentage_remaining_upper_critical_threshold     | The upper lifespan percentage remaining critical threshold
+ipmctl_lifespan_percentage_remaining_lower_critical_threshold     | The lower lifespan percentage remaining critical threshold
+ipmctl_lifespan_percentage_remaining_upper_fatal_threshold        | The upper lifespan percentage remaining fatal threshold
+ipmctl_lifespan_percentage_remaining_lower_fatal_threshold        | The lower lifespan percentage remaining fatal threshold
+ipmctl_lifespan_percentage_remaining_upper_noncritical_threshold  | The upper lifespan percentage remaining noncritical threshold
+ipmctl_lifespan_percentage_remaining_lower_noncritical_threshold  | The lower lifespan percentage remaining noncritical threshold
 
-Name                                                      | Description
-----------------------------------------------------------|-------------
-ipmctl_media_temperature_enabled                          | Indictes if firmware notifications are enabled when media temperature value is critical
-ipmctl_media_temperature_upper_critical_threshold         | The upper media temperature critical threshold
-ipmctl_media_temperature_lower_critical_threshold         | The lower media temperature critical threshold
-ipmctl_media_temperature_upper_fatal_threshold            | The upper media temperature fatal threshold
-ipmctl_media_temperature_lower_fatal_threshold            | The lower media temperature fatal threshold
-ipmctl_media_temperature_upper_noncritical_threshold      | The upper media temperature noncritical threshold
-ipmctl_media_temperature_lower_noncritical_threshold      | The lower media temperature noncritical threshold
-ipmctl_controller_temperature_enabled                     | Indictes if firmware notifications are enabled when controller temperature value is critical
-ipmctl_controller_temperature_upper_critical_threshold    | The upper controller temperature critical threshold
-ipmctl_controller_temperature_lower_critical_threshold    | The lower controller temperature critical threshold
-ipmctl_controller_temperature_upper_fatal_threshold       | The upper controller temperature fatal threshold
-ipmctl_controller_temperature_lower_fatal_threshold       | The lower controller temperature fatal threshold
-ipmctl_controller_temperature_upper_noncritical_threshold | The upper controller temperature noncritical threshold
-ipmctl_controller_temperature_lower_noncritical_threshold | The lower controller temperature noncritical threshold
-ipmctl_percentage_remaining_enabled                       | Indictes if firmware notifications are enabled when percentage remaining value is critical
-ipmctl_percentage_remaining_upper_critical_threshold      | The upper percentage remaining critical threshold
-ipmctl_percentage_remaining_lower_critical_threshold      | The lower percentage remaining critical threshold
-ipmctl_percentage_remaining_upper_fatal_threshold         | The upper percentage remaining fatal threshold"
-ipmctl_percentage_remaining_lower_fatal_threshold         | The lower percentage remaining fatal threshold"
-ipmctl_percentage_remaining_upper_noncritical_threshold   | The upper percentage remaining noncritical threshold
-ipmctl_percentage_remaining_lower_noncritical_threshold   | The lower percentage remaining noncritical threshold
+
+## Labels returned by `ipmctl_device_discovery_info`
+
+Name                                        | Description
+--------------------------------------------|-------------
+capacity                                    | Raw capacity in bytes.
+channel_id                                  | The memory channel number.
+channel_pos                                 | The memory module's position in the memory channel.
+controller_revision_id                      | Revision identifier of the DCPMM non-volatile memory subsystem controller from FIS.
+device_id                                   | The device identifier - Little Endian.
+fw_api_version                              | API version of the currently running FW.
+fw_revision                                 | The current active firmware revision.
+interface_format_codes                      | Calculate_capabilities_for_populated_devices() in device.c.
+lock_state                                  | Indicates if the DCPMM is in a locked security state.
+manageability                               | Compatibility of the device, FW and configuration with the management software.
+manufacturer                                | The manufacturer ID code determined by JEDEC JEP-106 - Little Endian.
+manufacturing_date                          | Date the DCPMM was manufactured, assigned by vendor only valid if manufacturing_info_valid=1.
+manufacturing_info_valid                    | Manufacturing location and date validity.
+manufacturing_location                      | DCPMM manufacturing location assigned by vendor only valid if manufacturing_info_valid=1.
+master_passphrase_enabled                   | If 1, master passphrase is enabled on the DCPMM.
+memory_controller_id                        | The ID of the associated memory controller.
+memory_type                                 | The type of memory used by the DCPMM.
+node_controller_id                          | The node controller ID.
+part_number                                 | The manufacturer's model part number.
+physical_id                                 | The unique physical ID of the memory module.
+revision_id                                 | The revision identifier.
+serial_number                               | Serial number assigned by the vendor - Little Endian.
+sku                                         | Stock keeping unit.
+socket_id                                   | The processor socket identifier.
+subsystem_device_id                         | Device identifier of the DCPMM non-volatile memory subsystem controller.
+subsystem_revision_id                       | Revision identifier of the DCPMM non-volatile memory subsystem controller from NFIT.
+subsystem_vendor_id                         | Vendor identifier of the DCPMM non-volatile memory subsystem controller - Little Endian.
+uid                                         | Unique identifier of the device.
+vendor_id                                   | The vendor identifier - Little Endian.
+
+
+## Labels returned by `ipmctl_device_security_capabilities_info`
+
+Name                                        | Description
+--------------------------------------------|-------------
+erase_crypto_capable                        | DCPMM supports nvm_erase command with the CRYPTO.
+master_passphrase_capable                   | DCPMM supports set master passphrase command.
+passphrase_capable                          | DCPMM supports the nvm_(set/remove)_passphrase command.
+uid                                         | Unique identifier of the device.
+unlock_device_capable                       | DCPMM supports the nvm_unlock_device command.
 
 # Build
 
