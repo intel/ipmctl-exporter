@@ -4,7 +4,7 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
+ * This package introduces wrapper for ipmctl library written in C.
  * api_parser.go file contains all functions bounded to ipmctl library
  * C types wrapped in GO by api_types.go file. All these functions are used
  * for parsing between exposed types

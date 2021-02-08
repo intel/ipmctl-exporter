@@ -4,7 +4,7 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
+ * This package introduces wrapper for ipmctl library written in C.
  * api_utils.go file contains all helper functions used mostly to create
  * some internal structures
  */

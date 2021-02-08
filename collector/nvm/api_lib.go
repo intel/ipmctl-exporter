@@ -4,14 +4,15 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
- * api_lib.go file expose exactly the same API as C library however or C types were
+ * This package introduces wrapper for ipmctl library written in C.
+ * api_lib.go file exposes exactly the same API as C library, however C types were
  * replace by proper go-like wrapers (see api_types.go). This API should be used
  * only inside the nvm package to write function used by exporter to collect
  * specific metrics (only these functions should be marked as public). It's a good
- * place to add wrapper for ipmictl API function needed to expose more metrics,
+ * place to add wrapper for ipmctl API function needed to expose more metrics,
  * so far the biggest part of these functions were stubbed.
  */
+
 package nvm
 
 // #cgo pkg-config: libipmctl
@@ -23,7 +24,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// libipmctl initialiation method
+// Init - libipmctl initialiation method
 func Init() (bool, error) {
 	if isLibInitialized {
 		log.Info("libipmctl was already initialized, nothing to be done")
@@ -38,7 +39,7 @@ func Init() (bool, error) {
 	return true, nil
 }
 
-// libipmctl un-initialization method
+// Uninit - libipmctl un-initialization method
 func Uninit() (bool, error) {
 	if !isLibInitialized {
 		log.Warn("libipmctl was not initialized, nothing to be done")
@@ -49,7 +50,7 @@ func Uninit() (bool, error) {
 	return true, nil
 }
 
-// Retrieves the number of devices installed in the system whether they are
+// GetNumberOfDevices retrieves the number of devices installed in the system whether they are
 // fully compatible with the current native API library version or not.
 // @pre The caller must have administrative privileges.
 // @remarks This method should be called before #nvm_get_devices.
@@ -66,70 +67,70 @@ func GetNumberOfDevices() (nvmStatusCodeEnumAttr, nvmUint8, error) {
 	return opstat, count, nil
 }
 
+// ConfFileInit - stubbed - implement if needed
 func ConfFileInit() {
-	// stubbed - implement if needed
 }
 
+// ConfFileFlush - stubbed - implement if needed
 func ConfFileFlush() {
-	// stubbed - implement if needed
 }
 
-func GetDimmId(iniFileName nvmUID) (nvmStatusCodeEnumAttr, uint, uint, error) {
-	// stubbed - implement if needed
+// GetDimmID - stubbed - implement if needed
+func GetDimmID(iniFileName nvmUID) (nvmStatusCodeEnumAttr, uint, uint, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	dimmId := uint(0)
+	dimmID := uint(0)
 	dimmHandle := uint(0)
-	return opstat, dimmId, dimmHandle, fmt.Errorf("Method is not implemented")
+	return opstat, dimmID, dimmHandle, fmt.Errorf("Method is not implemented")
 }
 
+// GetConfigInt - stubbed - implement if needed
 func GetConfigInt(paramName string, defaultVal int) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetHostName - stubbed - implement if needed
 func GetHostName() (nvmStatusCodeEnumAttr, string, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	hostname := "localhost"
 	return opstat, hostname, fmt.Errorf("Method is not implemented")
 }
 
+// GetHost - stubbed - implement if needed
 func GetHost() (nvmStatusCodeEnumAttr, host, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, host{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetSwInventory - stubbed - implement if needed
 func GetSwInventory() (nvmStatusCodeEnumAttr, host, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, host{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetNumberOfSockets - stubbed - implement if needed
 func GetNumberOfSockets() (nvmStatusCodeEnumAttr, int, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := int(0)
 	return opstat, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetSockets - stubbed - implement if needed
 func GetSockets() (nvmStatusCodeEnumAttr, socket, nvmUint16, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := nvmUint16(0)
 	return opstat, socket{}, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetNumberOfMemoryTopologyDevices - stubbed - implement if needed
 func GetNumberOfMemoryTopologyDevices() (nvmStatusCodeEnumAttr, uint, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := uint(0)
 	return opstat, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetMemoryTopology - stubbed - implement if needed
 func GetMemoryTopology(count uint8) (nvmStatusCodeEnumAttr, memoryTopology, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, memoryTopology{}, fmt.Errorf("Method is not implemented")
 }
@@ -165,51 +166,51 @@ func GetDevices(count nvmUint8) (nvmStatusCodeEnumAttr, []deviceDiscovery, error
 	return opstat, devices, nil
 }
 
+// GetDevicesNfit - stubbed - implement if needed
 func GetDevicesNfit(count nvmUint8) (nvmStatusCodeEnumAttr, deviceDiscovery, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceDiscovery{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetDeviceDiscovery - stubbed - implement if needed
 func GetDeviceDiscovery(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceDiscovery, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceDiscovery{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetDeviceStatus - stubbed - implement if needed
 func GetDeviceStatus(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceStatus, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceStatus{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetPMOMRegister - stubbed - implement if needed
 func GetPMOMRegister(deviceUID nvmUID,
 	smartDataMask uint8) (nvmStatusCodeEnumAttr, pmonRegisters, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, pmonRegisters{}, fmt.Errorf("Method is not implemented")
 }
 
+// SetPMONRegisters - stubbed - implement if needed
 func SetPMONRegisters(deviceUID nvmUID, pmonGroupEnable uint8) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetDeviceSettings - stubbed - implement if needed
 func GetDeviceSettings(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceSettings, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceSettings{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetDeviceDetails - stubbed - implement if needed
 func GetDeviceDetails(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceDetails, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceDetails{}, fmt.Errorf("Method is not implemented")
 }
 
-// @brief Retrieve a current snapshot of the performance metrics for the device
-// specified.
+// @brief Retrieves a current snapshot of the performance metrics
+// for the specified device.
 // @param[in] device_uid: The device identifier.
 // @pre The caller must have administrative privileges.
 // @pre The device is manageable.
@@ -221,8 +222,8 @@ func GetDevicePerformance(deviceUID nvmUID) (nvmStatusCodeEnumAttr,
 	devicePerformance,
 	error) {
 	cResult := C.struct_device_performance{}
-	cDeviceUid := deviceUID.toCharArray()
-	cOpstat := C.nvm_get_device_performance(&cDeviceUid[0], &cResult)
+	cDeviceUID := deviceUID.toCharArray()
+	cOpstat := C.nvm_get_device_performance(&cDeviceUID[0], &cResult)
 	if C.NVM_SUCCESS != cOpstat {
 		opstat := nvmStatusCodeEnumAttr(cOpstat)
 		return opstat, devicePerformance{},
@@ -233,51 +234,51 @@ func GetDevicePerformance(deviceUID nvmUID) (nvmStatusCodeEnumAttr,
 	return opstat, result, nil
 }
 
+// GetDeviceFwImageInfo - stubbed - implement if needed
 func GetDeviceFwImageInfo(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceFWInfo, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceFWInfo{}, fmt.Errorf("Method is not implemented")
 }
 
+// UpdateDeviceFw - stubbed - implement if needed
 func UpdateDeviceFw(deviceUID nvmUID,
 	path nvmPath,
 	pathLen nvmSize,
 	force bool) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// ExamineDeviceFw - stubbed - implement if needed
 func ExamineDeviceFw(deviceUID nvmUID,
 	path nvmPath,
 	pathLen nvmSize,
 	imageVersion nvmVersion,
 	imageVersionLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetNVMCapabilities - stubbed - implement if needed
 func GetNVMCapabilities() (nvmStatusCodeEnumAttr, nvmCapabilities, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, nvmCapabilities{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetNVMCapacities - stubbed - implement if needed
 func GetNVMCapacities() (nvmStatusCodeEnumAttr, deviceCapacities, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceCapacities{}, fmt.Errorf("Method is not implemented")
 }
 
+// GetSensors - stubbed - implement if needed
 func GetSensors(deviceUID nvmUID,
 	count nvmUint16) (nvmStatusCodeEnumAttr, []sensor, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, []sensor{}, fmt.Errorf("Method is not implemented")
 }
 
-// @brief Retrieve a specific health sensor from the specified DCPMM.
+// @brief Retrieves a specific health sensor from the specified DCPMM.
 // @param[in] deviceUid: The device identifier.
 // @param[in] stype: The specific #SensorType to retrieve.
 // @pre The caller has administrative privileges.
@@ -302,276 +303,276 @@ func GetSensor(deviceUID nvmUID,
 	return opstat, result, nil
 }
 
+// SetSensorSettings - stubbed - implement if needed
 func SetSensorSettings(deviceUID nvmUID,
 	stype sensorType,
 	settings sensorSettings) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// SetPassphrase - stubbed - implement if needed
 func SetPassphrase(deviceUID nvmUID,
 	oldPassphrase nvmPassphrase,
 	oldPassphraseLen nvmSize,
 	newPassphrase nvmPassphrase,
 	newPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// RemovePassphrase - stubbed - implement if needed
 func RemovePassphrase(deviceUID nvmUID,
 	passphrase nvmPassphrase,
 	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// UnlockDevice - stubbed - implement if needed
 func UnlockDevice(deviceUID nvmUID,
 	passphrase nvmPassphrase,
 	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// FreezelockDevice - stubbed - implement if needed
 func FreezelockDevice(deviceUID nvmUID) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// EraseDevice - stubbed - implement if needed
 func EraseDevice(deviceUID nvmUID,
 	passphrase nvmPassphrase,
 	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// SetMasterPassphrase - stubbed - implement if needed
 func SetMasterPassphrase(deviceUID nvmUID,
 	oldMasterPassphrase nvmPassphrase,
 	oldMasterPassphraseLen nvmSize,
 	newMasterPassphrase nvmPassphrase,
 	newMasterPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetNumberOfEvents - stubbed - implement if needed
 func GetNumberOfEvents(filter eventFilter) (nvmStatusCodeEnumAttr, int, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := int(0)
 	return opstat, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetEvents - stubbed - implement if needed
 func GetEvents(filter eventFilter, count nvmUint16) (nvmStatusCodeEnumAttr, []event, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, []event{}, fmt.Errorf("Method is not implemented")
 }
 
+// PurgeEvents - stubbed - implement if needed
 func PurgeEvents(filter eventFilter) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// AcknowledgeEvent - stubbed - implement if needed
 func AcknowledgeEvent(eventID nvmUint32) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetNumberOfRegions - stubbed - implement if needed
 func GetNumberOfRegions() (nvmStatusCodeEnumAttr, nvmUint8, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := nvmUint8(0)
 	return opstat, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetNumberOfRegionsEx - - stubbed - implement if needed
 func GetNumberOfRegionsEx(useNfit nvmBool) (nvmStatusCodeEnumAttr, nvmUint8, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := nvmUint8(0)
 	return opstat, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetRegions - stubbed - implement if needed
 func GetRegions() (nvmStatusCodeEnumAttr, []region, nvmUint8, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := nvmUint8(0)
 	return opstat, []region{}, count, fmt.Errorf("Method is not implemented")
 }
 
+// GetRegionsEx - stubbed - implement if needed
 func GetRegionsEx(useNfit nvmBool) (nvmStatusCodeEnumAttr, []region, nvmUint8, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	count := nvmUint8(0)
 	return opstat, []region{}, count, fmt.Errorf("Method is not implemented")
 }
 
+// CreateConfigGoal - stubbed - implement if needed
 func CreateConfigGoal(deviceUIDs []nvmUID,
 	deviceUIDsCount nvmUint32,
 	goal configGoalInput) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetConfigGoal - stubbed - implement if needed
 func GetConfigGoal(deviceUIDs []nvmUID,
 	deviceUIDsCount nvmUint32) (nvmStatusCodeEnumAttr, configGoal, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, configGoal{}, fmt.Errorf("Method is not implemented")
 }
 
+// DeleteConfigGoal - stubbed - implement if needed
 func DeleteConfigGoal(deviceUIDs []nvmUID, deviceUIDsCount nvmUint32) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// DumpGoalConfig - stubbed - implement if needed
 func DumpGoalConfig(file nvmPath, fileLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// LoadGoalConfig - stubbed - implement if needed
 func LoadGoalConfig(file nvmPath, fileLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetMajorVersion - stubbed - implement if needed
 func GetMajorVersion() int {
-	// stubbed - implement if needed
 	majorVersion := int(0)
 	return majorVersion
 }
 
+// GetMinorVersion - stubbed - implement if needed
 func GetMinorVersion() int {
-	// stubbed - implement if needed
 	minorVersion := int(0)
 	return minorVersion
 }
 
+// GetHotfixNumber - stubbed - implement if needed
 func GetHotfixNumber() int {
-	// stubbed - implement if needed
 	hotfixVersionNumber := int(0)
 	return hotfixVersionNumber
 }
 
+// GetBuildNumber - stubbed - implement if needed
 func GetBuildNumber() int {
-	// stubbed - implement if needed
 	buildVersionNumber := int(0)
 	return buildVersionNumber
 }
 
+// GetVersion - stubbed - implement if needed
 func GetVersion(strLen nvmSize) (nvmStatusCodeEnumAttr, nvmVersion, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	versionStr := nvmVersion("")
 	return opstat, versionStr, fmt.Errorf("Method is not implemented")
 }
 
+// GatherSupport - stubbed - implement if needed
 func GatherSupport(supportFile nvmPath, supportFileLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// InjectDeviceError - stubbed - implement if needed
 func InjectDeviceError(deviceUID nvmUID, derror deviceError) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// ClearInjectedDeviceError - stubbed - implement if needed
 func ClearInjectedDeviceError(deviceUID nvmUID,
 	derror deviceError) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// RunDiagnostic - stubbed - implement if needed
 func RunDiagnostic(deviceUID nvmUID,
 	diagnostic diagnostic) (nvmStatusCodeEnumAttr, nvmUint32, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	results := nvmUint32(0)
 	return opstat, results, fmt.Errorf("Method is not implemented")
 }
 
+// SetUserPreferences - stubbed - implement if needed
 func SetUserPreferences(key nvmPreferenceKey,
 	value nvmPreferenceValue) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
-func ClearDimmLsa(deviceUid nvmUID) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
+// ClearDimmLsa - stubbed - implement if needed
+func ClearDimmLsa(deviceUID nvmUID) (nvmStatusCodeEnumAttr, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// DebugLoggingEnabled - stubbed - implement if needed
 func DebugLoggingEnabled() (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// ToggleDebugLogging - stubbed - implement if needed
 func ToggleDebugLogging(enabled nvmBool) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetJobs - stubbed - implement if needed
 func GetJobs(count nvmUint32) (nvmStatusCodeEnumAttr, job, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, job{}, fmt.Errorf("Method is not implemented")
 }
 
+// CreateContext - stubbed - implement if needed
 func CreateContext() (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// FreeContext - stubbed - implement if needed
 func FreeContext(foce nvmBool) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// SendDevicePassthroughCmd - stubbed - implement if needed
 func SendDevicePassthroughCmd(deviceUID nvmUID, cmd devicePTCmd) (nvmStatusCodeEnumAttr, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
+// GetFwErrorLogEntryCmd - stubbed - implement if needed
 func GetFwErrorLogEntryCmd(deviceUID nvmUID,
 	seqNum uint,
 	logLevel uint8,
 	logType uint8) (nvmStatusCodeEnumAttr, errorLog, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, errorLog{}, fmt.Errorf("method is not implemented")
 }
 
+// GetFwErrLogStats - stubbed - implement if needed
 func GetFwErrLogStats(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceErrorLogStatus, error) {
-	// stubbed - implement if needed
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceErrorLogStatus{}, fmt.Errorf("method is not implemented")
 }
 
-func SyncLockApi() {
-	// stubbed
+// SyncLockAPI - stubbed - implement if needed
+func SyncLockAPI() {
 }
 
-func SyncUnlockApi() {
-	// stubbed
+//SyncUnlockAPI - stubbed - implement if needed
+func SyncUnlockAPI() {
 }

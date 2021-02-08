@@ -88,21 +88,21 @@ func newIpmctlCollector(enableThresholds bool) *ipmctlCollector {
 		"Lifetime number of DDRT write transactions the DCPMM has serviced", nvm.DevPerformanceLabelNames, nil)
 	collector.health = prometheus.NewDesc("ipmctl_health",
 		"DCPMM health as reported in the SMART log", nvm.SensorLabelNames, nil)
-	collector.mediaTemperature = prometheus.NewDesc("ipmctl_media_temperature_degrees_c",
+	collector.mediaTemperature = prometheus.NewDesc("ipmctl_media_temperature_celsius",
 		"Device media temperature in degrees Celsius", nvm.SensorLabelNames, nil)
-	collector.controllerTemperature = prometheus.NewDesc("ipmctl_controller_temperature_degrees_c",
+	collector.controllerTemperature = prometheus.NewDesc("ipmctl_controller_temperature_celsius",
 		"Device media temperature in degrees Celsius", nvm.SensorLabelNames, nil)
-	collector.percentageRemaining = prometheus.NewDesc("ipmctl_percentage_remaining",
-		"Amount of percentage remaining as a percentage", nvm.SensorLabelNames, nil)
+	collector.percentageRemaining = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining",
+		"Amount of lifespan remaining as a percentage", nvm.SensorLabelNames, nil)
 	collector.latchedDirtyShutdownCount = prometheus.NewDesc("ipmctl_latched_dirty_shutdown_count_total",
 		"Device shutdowns without notification", nvm.SensorLabelNames, nil)
-	collector.powerOnTime = prometheus.NewDesc("ipmctl_power_on_time_total",
+	collector.powerOnTime = prometheus.NewDesc("ipmctl_power_on_time_seconds_total",
 		"Total power-on time over the lifetime of the device", nvm.SensorLabelNames, nil)
 	collector.upTime = prometheus.NewDesc("ipmctl_up_time_seconds_total",
 		"Total power-on time since the last power cycle of the device", nvm.SensorLabelNames, nil)
 	collector.powerCycles = prometheus.NewDesc("ipmctl_power_cycles_total",
 		"Number of power cycles over the lifetime of the device", nvm.SensorLabelNames, nil)
-	collector.fwErrorCount = prometheus.NewDesc("ipmctl_fw_error_count_total",
+	collector.fwErrorCount = prometheus.NewDesc("ipmctl_fw_error_total",
 		"The total number of firmware error log entries", nvm.SensorLabelNames, nil)
 	collector.unlatchedDirtyShutdownCount = prometheus.NewDesc("ipmctl_unlatched_dirty_shutdown_count_total",
 		"Number of times that the FW received an unexpected power loss", nvm.SensorLabelNames, nil)
@@ -117,46 +117,46 @@ func newIpmctlCollector(enableThresholds bool) *ipmctlCollector {
 	if enableThresholds {
 		collector.mtEnabled = prometheus.NewDesc("ipmctl_media_temperature_enabled",
 			"Indictes if firmware notifications are enabled when media temperature value is critical", nvm.SettingsLabelNames, nil)
-		collector.mtUpperCriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_critical_threshold",
+		collector.mtUpperCriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_critical_threshold_celsius",
 			"The upper media temperature critical threshold", nvm.SettingsLabelNames, nil)
-		collector.mtLowerCriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_critical_threshold",
+		collector.mtLowerCriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_critical_threshold_celsius",
 			"The lower media temperature critical threshold", nvm.SettingsLabelNames, nil)
-		collector.mtUpperFatalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_fatal_threshold",
+		collector.mtUpperFatalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_fatal_threshold_celsius",
 			"The upper media temperature fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.mtLowerFatalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_fatal_threshold",
+		collector.mtLowerFatalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_fatal_threshold_celsius",
 			"The lower media temperature fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.mtUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_noncritical_threshold",
+		collector.mtUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_upper_noncritical_threshold_celsius",
 			"The upper media temperature noncritical threshold", nvm.SettingsLabelNames, nil)
-		collector.mtLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_noncritical_threshold",
+		collector.mtLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_media_temperature_lower_noncritical_threshold_celsius",
 			"The lower media temperature noncritical threshold", nvm.SettingsLabelNames, nil)
 		collector.ctEnabled = prometheus.NewDesc("ipmctl_controller_temperature_enabled",
 			"Indictes if firmware notifications are enabled when controller temperature value is critical", nvm.SettingsLabelNames, nil)
-		collector.ctUpperCriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_critical_threshold",
+		collector.ctUpperCriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_critical_threshold_celsius",
 			"The upper controller temperature critical threshold", nvm.SettingsLabelNames, nil)
-		collector.ctLowerCriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_critical_threshold",
+		collector.ctLowerCriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_critical_threshold_celsius",
 			"The lower controller temperature critical threshold", nvm.SettingsLabelNames, nil)
-		collector.ctUpperFatalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_fatal_threshold",
+		collector.ctUpperFatalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_fatal_threshold_celsius",
 			"The upper controller temperature fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.ctLowerFatalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_fatal_threshold",
+		collector.ctLowerFatalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_fatal_threshold_celsius",
 			"The lower controller temperature fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.ctUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_noncritical_threshold",
+		collector.ctUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_upper_noncritical_threshold_celsius",
 			"The upper controller temperature noncritical threshold", nvm.SettingsLabelNames, nil)
-		collector.ctLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_noncritical_threshold",
+		collector.ctLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_controller_temperature_lower_noncritical_threshold_celsius",
 			"The lower controller temperature noncritical threshold", nvm.SettingsLabelNames, nil)
-		collector.prEnabled = prometheus.NewDesc("ipmctl_percentage_remaining_enabled",
-			"Indictes if firmware notifications are enabled when percentage remaining value is critical", nvm.SettingsLabelNames, nil)
-		collector.prUpperCriticalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_upper_critical_threshold",
-			"The upper percentage remaining critical threshold", nvm.SettingsLabelNames, nil)
-		collector.prLowerCriticalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_lower_critical_threshold",
-			"The lower percentage remaining critical threshold", nvm.SettingsLabelNames, nil)
-		collector.prUpperFatalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_upper_fatal_threshold",
-			"The upper percentage remaining fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.prLowerFatalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_lower_fatal_threshold",
-			"The lower percentage remaining fatal threshold", nvm.SettingsLabelNames, nil)
-		collector.prUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_upper_noncritical_threshold",
-			"The upper percentage remaining noncritical threshold", nvm.SettingsLabelNames, nil)
-		collector.prLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_percentage_remaining_lower_noncritical_threshold",
-			"The lower percentage remaining noncritical threshold", nvm.SettingsLabelNames, nil)
+		collector.prEnabled = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_enabled",
+			"Indictes if firmware notifications are enabled when lifespan percentage remaining value is critical", nvm.SettingsLabelNames, nil)
+		collector.prUpperCriticalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_upper_critical_threshold",
+			"The upper lifespan percentage remaining critical threshold", nvm.SettingsLabelNames, nil)
+		collector.prLowerCriticalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_lower_critical_threshold",
+			"The lower lifespan percentage remaining critical threshold", nvm.SettingsLabelNames, nil)
+		collector.prUpperFatalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_upper_fatal_threshold",
+			"The upper lifespan percentage remaining fatal threshold", nvm.SettingsLabelNames, nil)
+		collector.prLowerFatalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_lower_fatal_threshold",
+			"The lower lifespan percentage remaining fatal threshold", nvm.SettingsLabelNames, nil)
+		collector.prUpperNoncriticalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_upper_noncritical_threshold",
+			"The upper lifespan percentage remaining noncritical threshold", nvm.SettingsLabelNames, nil)
+		collector.prLowerNoncriticalThreshold = prometheus.NewDesc("ipmctl_lifespan_percentage_remaining_lower_noncritical_threshold",
+			"The lower lifespan percentage remaining noncritical threshold", nvm.SettingsLabelNames, nil)
 	}
 	return collector
 }

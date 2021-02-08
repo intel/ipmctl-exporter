@@ -2,14 +2,14 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
- * api_metadata.go file expose some information about DCPMM taken mostly
- * during DIMM dicovery process. Adding all the information to the labels
- * section of each metric is not a good idea, because some of them may changed
+ * This package introduces wrapper for ipmctl library written in C.
+ * api_metadata.go file exposes some information about DCPMM taken mostly
+ * during DIMM discovery process. Adding all the information to the labels
+ * section of each metric is not a good idea, because some of them may change
  * during the execution (like for instance fw revision number), that is why
- * these information were exposed as a seperate metrics, were value is always
+ * these information were exposed as a separate metrics, where value is always
  * set to "1". This solution was borrowed from node exporter, and sample usage
- * was introduce here: https://tiantiankan.me/a/5ce42184714c6a22ca1f62f5
+ * was introduced here: https://tiantiankan.me/a/5ce42184714c6a22ca1f62f5
  */
 
 package nvm
@@ -18,7 +18,7 @@ import (
 	"fmt"
 )
 
-//Variable initialised during build
+//Version variable is initialised during build
 var Version string
 
 var DeviceDiscoveryLabelNames = []string{

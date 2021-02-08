@@ -2,8 +2,8 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
- * api_settings.go file expose external API for exporter to collect
+ * This package introduces wrapper for ipmctl library written in C.
+ * api_settings.go file exposes external API for exporter to collect
  * some NVM sensor settings information, like for instance sensor thresholds.
  */
 

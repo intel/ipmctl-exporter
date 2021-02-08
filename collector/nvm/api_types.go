@@ -4,9 +4,9 @@
  * Copyright (c) 2020-2021, Intel Corporation.
  * SPDX-License-Identifier: BSD-3-Clause
  **
- * This package introduce wrapper for ipmctl library written in C.
- * api_types.go is a wrapper for all types used by ipmctl librrary written in C
- * These types and only these should be used by lib API functions wrraper.
+ * This package introduces wrapper for ipmctl library written in C.
+ * api_types.go is a wrapper for all types used by ipmctl library written in C
+ * These types and only these should be used by lib API functions wrapper.
  */
 package nvm
 
