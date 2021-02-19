@@ -127,8 +127,8 @@ and latest [ipmctl](https://github.com/intel/ipmctl/releases) +
 follow the steps below to prepare your environment for builds:
 ```shell
 dnf install -y git cmake pkg-config gcc golang ndctl-libs libipmctl
-git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
-cd ./ipmctl_exporter
+git clone https://github.com/intel/ipmctl-exporter
+cd ./ipmctl-exporter
 cmake -S . -B output
 ```
 
@@ -171,8 +171,8 @@ Please avoid whitespaces for git repository directory, some Windows OSes may fac
 
 ---
 ```powershell
-git clone https://sv-gitlab.igk.intel.com/validation-analytics-platform/ipmctl_exporter.git
-cd ipmctl_exporter
+git clone https://github.com/intel/ipmctl-exporter
+cd ipmctl-exporter
 cmake -S . -B output -G "MinGW Makefiles"
 ```
 
@@ -187,7 +187,7 @@ mingw32-make -C output
 
 Referring to the
 [list of default ports](https://github.com/prometheus/prometheus/wiki/Default-port-allocations)
-by default ipmclt-exporter serves on port `0.0.0.0:9757` at endpoint `/metrics`,
+by default ipmctl-exporter serves on port `0.0.0.0:9757` at endpoint `/metrics`,
 for more details about the usage type:
 
 ```
