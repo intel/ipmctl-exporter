@@ -4,7 +4,7 @@ libdir=@CMAKE_INSTALL_FULL_LIBDIR@
 includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
 Name: libipmctl
-Description: An Application Programming Interface (API) library for managing DCPMMs
+Description: Application for exposing health and performance metrics from Intel Optane DC Persistent memory modules (DCPMM) for Prometheus.
 Version: @IPMCTL_EXPORTER_VERSION_STRING@
 Libs: -L${libdir} -lndctl -ldaxctl -lkmod -lipmctl
 Cflags: -I${includedir}
