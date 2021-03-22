@@ -187,3 +187,59 @@ if(WIN_BUILD)
     set(ENV{PKG_CONFIG_PATH} "${OUTPUTDIR}")
 	message("PKG_CONFIG_PATH: " $ENV{PKG_CONFIG_PATH})
 endif()
+
+# Windows installer build
+if(WIN_BUILD AND RELEASE)
+
+    # IPMCTL release link, used to download IPMCTL Windows installer
+    SET(IPMCTL_RELEASE_URL https://github.com/intel/ipmctl/releases/download)
+    # VERSION NUMBER - REMEMBER TO UPDATE WHEN NEW RELEASE COMES OUT
+    SET(IPMCTL_VERSION 02.00.00.3852)
+    SET(IPMCTL_NAME ipmctl_windows_install-${IPMCTL_VERSION}.exe)
+    
+    # Downloads IPMCTL Windows installer that is embedded into our exporter installer
+    if (NOT EXISTS ${IPMCTL_NAME})
+        MESSAGE(DOWNLOADING_IPMCTL_WINDOWS_SETUP)
+        file(DOWNLOAD ${IPMCTL_RELEASE_URL}/v${IPMCTL_VERSION}/${IPMCTL_NAME} ${IPMCTL_NAME}
+             SHOW_PROGRESS)
+    endif()
+    install(PROGRAMS ${OUTPUTDIR}/${IPMCTL_NAME}
+            DESTINATION "PMem Software"
+            COMPONENT ipmctl
+    )
+    
+    set(CPACK_PACKAGE_VERSION_MAJOR ${IPMCTL_EXPORTER_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${IPMCTL_EXPORTER_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${IPMCTL_EXPORTER_VERSION_PATCH})
+    set(CPACK_RESOURCE_FILE_LICENSE ${ROOT}/LICENSE.txt)
+    SET(CPACK_NSIS_DISPLAY_NAME "Intel(R) Optane(TM) PMC Exporter")
+    #SET(CPACK_PACKAGE_NAME "Intel(R) Optane(TM) PMC Exporter")
+    
+    # Checks for already installed versions
+    SET(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+    
+    # Extra command that runs the embedded Ipmctl Windows installer
+    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+        " ExecWait '$INSTDIR\\\\PMem Software\\\\${IPMCTL_NAME}' "
+    )
+    
+    # Default installation path
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ipmctl-exporter")
+    set(CPACK_NSIS_INSTALL_ROOT $PROGRAMFILES\\\\Intel)
+    
+    include(CPack)
+    
+    cpack_add_component(ipmctl_exporter
+                        DISPLAY_NAME "Ipmctl-Exporter"
+                        DESCRIPTION  "Utility for exposing health and performance metrics 
+                                      from Intel(R) Optane(TM) Persistent Memory modules (PMem)
+                                      for Prometheus."
+                        REQUIRED 1
+    ) 
+                                                    
+    cpack_add_component(ipmctl
+                        DISPLAY_NAME "Ipmctl"
+                        DESCRIPTION "Utility for configuring and managing Intel(R) Optane(TM) Persistent Memory modules (PMem)."
+    )
+
+endif()

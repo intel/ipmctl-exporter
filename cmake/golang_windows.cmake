@@ -12,5 +12,5 @@ function(add_go_executable NAME)
         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 
     add_custom_target(${NAME} ALL DEPENDS ${OUTPUTDIR}/.timestamp ${ARGN})
-    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${NAME} DESTINATION bin)
+    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.exe DESTINATION bin COMPONENT ipmctl_exporter)
 endfunction(add_go_executable)
