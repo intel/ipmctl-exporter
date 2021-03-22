@@ -195,7 +195,7 @@ if(WIN_BUILD AND RELEASE)
     SET(IPMCTL_RELEASE_URL https://github.com/intel/ipmctl/releases/download)
     # VERSION NUMBER - REMEMBER TO UPDATE WHEN NEW RELEASE COMES OUT
     SET(IPMCTL_VERSION 02.00.00.3852)
-    SET(IPMCTL_NAME ipmctl_windows_install-${IPMCTL_VERSION}.exe)
+    SET(IPMCTL_NAME "ipmctl_windows_install-${IPMCTL_VERSION}.exe")
     
     # Downloads IPMCTL Windows installer that is embedded into our exporter installer
     if (NOT EXISTS ${IPMCTL_NAME})
