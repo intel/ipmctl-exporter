@@ -200,7 +200,7 @@ if(WIN_BUILD AND RELEASE)
     # Downloads IPMCTL Windows installer that is embedded into our exporter installer
     if (NOT EXISTS ${IPMCTL_NAME})
         MESSAGE(DOWNLOADING_IPMCTL_WINDOWS_SETUP)
-        file(DOWNLOAD ${IPMCTL_RELEASE_URL}/v${IPMCTL_VERSION}/${IPMCTL_NAME} ${IPMCTL_NAME}
+        file(DOWNLOAD ${IPMCTL_RELEASE_URL}/v${IPMCTL_VERSION}/${IPMCTL_NAME} ${OUTPUTDIR}/${IPMCTL_NAME}
              SHOW_PROGRESS)
     endif()
     install(PROGRAMS ${OUTPUTDIR}/${IPMCTL_NAME}
