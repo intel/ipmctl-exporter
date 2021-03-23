@@ -1,0 +1,20 @@
+Source: ipmctl-exporter
+Section: libs
+Priority: optional
+Maintainer: maintainer <MaintainerEmail>
+Build-Depends:  debhelper (>=10),
+                cmake,
+                pkg-config,
+                golang,
+                ipmctl,
+                ndctl,
+                daxctl
+Standards-Version: 4.0.0
+Homepage: https://github.com/intel/ipmctl-exporter
+
+Package: ipmctl-exporter
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Exporter for health and performance metrics from DCPMMs.
+    Application for exposing health and performance metrics from
+    Intel Optane DC Persistent memory modules (DCPMM) for Prometheus.
