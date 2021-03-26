@@ -34,5 +34,5 @@ function(add_go_executable NAME)
     endif()
 
     add_custom_target(${NAME} ALL DEPENDS ${OUTPUTDIR}/.timestamp ${ARGN})
-    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${NAME} DESTINATION bin)
+    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${NAME} DESTINATION bin COMPONENT ipmctl_exporter)
 endfunction(add_go_executable)
