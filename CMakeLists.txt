@@ -192,15 +192,15 @@ endif()
 if(WIN_BUILD AND RELEASE)
 
     # IPMCTL release link, used to download IPMCTL Windows installer
-    SET(IPMCTL_RELEASE_URL https://github.com/intel/ipmctl/releases/download)
+    set(IPMCTL_RELEASE_URL https://github.com/intel/ipmctl/releases/download)
     # VERSION NUMBER - REMEMBER TO UPDATE WHEN NEW RELEASE COMES OUT
-    SET(IPMCTL_VERSION 02.00.00.3852)
-    SET(IPMCTL_NAME "ipmctl_windows_install-${IPMCTL_VERSION}.exe")
+    set(IPMCTL_VERSION 02.00.00.3852)
+    set(IPMCTL_NAME "ipmctl_windows_install-${IPMCTL_VERSION}.exe")
     
     # Downloads IPMCTL Windows installer that is embedded into our exporter installer
     if (NOT EXISTS ${IPMCTL_NAME})
-        MESSAGE(DOWNLOADING_IPMCTL_WINDOWS_SETUP)
-        file(DOWNLOAD ${IPMCTL_RELEASE_URL}/v${IPMCTL_VERSION}/${IPMCTL_NAME} ${OUTPUTDIR}/${IPMCTL_NAME}
+        message(DOWNLOADING_IPMCTL_WINDOWS_SETUP)
+        FILE(DOWNLOAD ${IPMCTL_RELEASE_URL}/v${IPMCTL_VERSION}/${IPMCTL_NAME} ${OUTPUTDIR}/${IPMCTL_NAME}
              SHOW_PROGRESS)
     endif()
     install(PROGRAMS ${OUTPUTDIR}/${IPMCTL_NAME}
@@ -210,14 +210,13 @@ if(WIN_BUILD AND RELEASE)
     
     set(CPACK_PACKAGE_VERSION ${IPMCTL_EXPORTER_VERSION_STRING})
     set(CPACK_RESOURCE_FILE_LICENSE ${ROOT}/LICENSE.txt)
-    SET(CPACK_NSIS_DISPLAY_NAME "Intel(R) Optane(TM) PMC Exporter")
-    #SET(CPACK_PACKAGE_NAME "Intel(R) Optane(TM) PMC Exporter")
+    set(CPACK_NSIS_DISPLAY_NAME "Intel(R) Optane(TM) PMC Exporter")
     
     # Checks for already installed versions
-    SET(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+    set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
     
     # Extra command that runs the embedded Ipmctl Windows installer
-    SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS 
         " ExecWait '$INSTDIR\\\\PMem Software\\\\${IPMCTL_NAME}' "
     )
     
