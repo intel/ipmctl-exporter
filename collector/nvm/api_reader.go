@@ -13,15 +13,15 @@ import (
 	"fmt"
 )
 
-const NUMBER_OF_AVAILABLE_SENSORS = 10
+const NumberOfAvailableSensors = 10
 
 type device struct {
 	uid               nvmUID
 	discovery         deviceDiscovery
-	sensors           [NUMBER_OF_AVAILABLE_SENSORS]sensor
+	sensors           [NumberOfAvailableSensors]sensor
 	performance       devicePerformance
 	performanceOpstat nvmStatusCodeEnumAttr
-	sensorsOpstat     [NUMBER_OF_AVAILABLE_SENSORS]nvmStatusCodeEnumAttr
+	sensorsOpstat     [NumberOfAvailableSensors]nvmStatusCodeEnumAttr
 }
 
 type MetricsReader struct {
@@ -60,7 +60,7 @@ func (reader *MetricsReader) GetRequiredReadings() (bool, error) {
 		reader.devices[i].uid = discoveries[i].uid
 		reader.devices[i].discovery = discoveries[i]
 		reader.devices[i].performanceOpstat, reader.devices[i].performance, _ = GetDevicePerformance(discoveries[i].uid)
-		for j := sensorTypeEnum.sensorHealth; j < NUMBER_OF_AVAILABLE_SENSORS; j++ {
+		for j := sensorTypeEnum.sensorHealth; j < NumberOfAvailableSensors; j++ {
 			reader.devices[i].sensorsOpstat[j], reader.devices[i].sensors[j], _ = GetSensor(discoveries[i].uid, j)
 		}
 	}
