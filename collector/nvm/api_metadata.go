@@ -53,14 +53,6 @@ var DeviceDiscoveryLabelNames = []string{
 	"master_passphrase_enabled",
 }
 
-var DeviceSecurityCapabilitiesLabelNames = []string{
-	"uid",
-	"passphrase_capable",
-	"unlock_device_capable",
-	"erase_crypto_capable",
-	"master_passphrase_capable",
-}
-
 var DeviceCapabilitiesLabelNames = []string{
 	"uid",
 	"package_sparing_capable",
@@ -73,21 +65,15 @@ var IpmctlExporterLabelNames = []string{
 }
 
 type deviceDiscoveryReading MetricReading
-type deviceSecurityCapabilitiesReading MetricReading
 type deviceCapabilitiesReading MetricReading
 type IpmctlExporterReading MetricReading
 
 type deviceDiscoveryLabels MetricLabels
-type deviceSecurityCapabilitiesLabels MetricLabels
 type deviceCapabilitiesLabels MetricLabels
 type IpmctlExporterLabels MetricLabels
 
 func (ddl deviceDiscoveryLabels) GetLabelValues() []string {
 	return getValuesByName(DeviceDiscoveryLabelNames, MetricLabels(ddl).labels)
-}
-
-func (dscl deviceSecurityCapabilitiesLabels) GetLabelValues() []string {
-	return getValuesByName(DeviceSecurityCapabilitiesLabelNames, MetricLabels(dscl).labels)
 }
 
 func (dcl deviceCapabilitiesLabels) GetLabelValues() []string {
@@ -102,9 +88,6 @@ func (ddl deviceDiscoveryLabels) GetLabelNames() []string {
 	return DeviceDiscoveryLabelNames
 }
 
-func (dscl deviceSecurityCapabilitiesLabels) GetLabelNames() []string {
-	return DeviceSecurityCapabilitiesLabelNames
-}
 
 func (dcl deviceCapabilitiesLabels) GetLabelNames() []string {
 	return DeviceCapabilitiesLabelNames
@@ -116,10 +99,6 @@ func (iel IpmctlExporterLabels) GetLabelNames() []string {
 
 func (ddl deviceDiscoveryLabels) addLabel(name string, value string) {
 	MetricLabels(ddl).labels[name] = value
-}
-
-func (dscl deviceSecurityCapabilitiesLabels) addLabel(name string, value string) {
-	MetricLabels(dscl).labels[name] = value
 }
 
 func (dcl deviceCapabilitiesLabels) addLabel(name string, value string) {
@@ -139,17 +118,6 @@ func newDeviceDiscoveryReading(dimmUID nvmUID,
 	deviceDiscoveryReading.MetricValue = float64(ddValue)
 	deviceDiscoveryReading.Labels = deviceDiscoveryLabels(*newMetricLabels())
 	return deviceDiscoveryReading
-}
-
-func newDeviceSecurityCapabilitiesReading(dimmUID nvmUID,
-	dscValue nvmUint64) *deviceSecurityCapabilitiesReading {
-	devSecCapabilitiesReading := new(deviceSecurityCapabilitiesReading)
-	devSecCapabilitiesReading.DIMMUID = string(dimmUID)
-	devSecCapabilitiesReading.ReadStatus = int(0)
-	devSecCapabilitiesReading.MetricType = uint8(0)
-	devSecCapabilitiesReading.MetricValue = float64(dscValue)
-	devSecCapabilitiesReading.Labels = deviceSecurityCapabilitiesLabels(*newMetricLabels())
-	return devSecCapabilitiesReading
 }
 
 func newDeviceCapabilitiesReading(dimmUID nvmUID,
@@ -209,21 +177,6 @@ func (reader *MetricsReader) GetDeviceDiscoveryInfo() []MetricReading {
 		devDiscoveryReading.Labels.addLabel("controller_revision_id", discovery.controllerRevisionID.toString(16))
 		devDiscoveryReading.Labels.addLabel("master_passphrase_enabled", discovery.masterPassphraseEnabled.toString(10))
 		results[i] = MetricReading(devDiscoveryReading)
-	}
-	return results
-}
-
-func (reader *MetricsReader) GetDeviceSecurityCapabilitiesInfo() []MetricReading {
-	results := make([]MetricReading, reader.deviceCount)
-	for i, dev := range reader.devices {
-		discovery := dev.discovery
-		devSecCapsReading := *newDeviceSecurityCapabilitiesReading(dev.uid, 1)
-		devSecCapsReading.Labels.addLabel("uid", string(dev.uid))
-		devSecCapsReading.Labels.addLabel("passphrase_capable", discovery.securityCapabilities.passphraseCapable.toString(10))
-		devSecCapsReading.Labels.addLabel("unlock_device_capable", discovery.securityCapabilities.unlockDeviceCapable.toString(10))
-		devSecCapsReading.Labels.addLabel("erase_crypto_capable", discovery.securityCapabilities.eraseCryptoCapable.toString(10))
-		devSecCapsReading.Labels.addLabel("master_passphrase_capable", discovery.securityCapabilities.masterPassphraseCapable.toString(10))
-		results[i] = MetricReading(devSecCapsReading)
 	}
 	return results
 }

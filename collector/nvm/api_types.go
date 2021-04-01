@@ -564,7 +564,6 @@ type (
 		getDeviceSettings        nvmBool
 		modifyDeviceSettings     nvmBool
 		getDeviceSecurity        nvmBool
-		modifyDeviceSecurity     nvmBool
 		getDevicePerformance     nvmBool
 		getDeviceDeviceFirmware  nvmBool
 		updateDeviceFirmware     nvmBool
@@ -589,7 +588,7 @@ type (
 		memoryMode               nvmBool
 		appDirectMode            nvmBool
 		errorInjection           nvmBool
-		reserved                 [32]nvmUint8
+		reserved                 [33]nvmUint8
 	}
 	swCapabilities struct {
 		minNamespaceSize                     nvmUint64
@@ -854,6 +853,16 @@ type (
 		result          interface{}
 		reserved        [64]nvmUint8
 	}
+	commandEffectLog struct {
+		opcode          nvmUint32
+		effects         nvmUint32
+	  
+	}
+	commandAccessPolicy struct {
+        opcode                nvmUint8
+        sub_opcode            nvmUint8
+        restriction           nvmUint8
+	}
 	devicePTCmd struct {
 		opcode                 nvmUint8
 		subOpcode              nvmUint8
@@ -1098,7 +1107,6 @@ var (
 		interleaveTypeDefault:        0,
 		interleaveTypeInterleaved:    1,
 		interleaveTypeNotInterleaved: 2,
-		interleaveTypeMirrored:       3,
 	}
 	regionHealthEnum = &regionHealth{
 		regionHealthNormal:  1,

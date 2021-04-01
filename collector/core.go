@@ -62,7 +62,6 @@ type ipmctlCollector struct {
 	prLowerNoncriticalThreshold *prometheus.Desc
 	// metadata readings (some sort of states / additional information)
 	deviceDiscoveryInfo            *prometheus.Desc
-	deviceSecurityCapabilitiesInfo *prometheus.Desc
 	deviceCapabilitiesInfo         *prometheus.Desc
 	ipmctlExporterInfo             *prometheus.Desc
 }
@@ -108,8 +107,6 @@ func newIpmctlCollector(enableThresholds bool) *ipmctlCollector {
 		"Number of times that the FW received an unexpected power loss", nvm.SensorLabelNames, nil)
 	collector.deviceDiscoveryInfo = prometheus.NewDesc("ipmctl_device_discovery_info",
 		"Describes an enterprise-level view of a device", nvm.DeviceDiscoveryLabelNames, nil)
-	collector.deviceSecurityCapabilitiesInfo = prometheus.NewDesc("ipmctl_device_security_capabilities_info",
-		"Describes the security capabilities of a device", nvm.DeviceSecurityCapabilitiesLabelNames, nil)
 	collector.deviceCapabilitiesInfo = prometheus.NewDesc("impctl_device_capabilities_info",
 		"Describes the capabilities supported by a DCPMM", nvm.DeviceCapabilitiesLabelNames, nil)
 	collector.ipmctlExporterInfo = prometheus.NewDesc("ipmctl_info",
@@ -178,7 +175,6 @@ func (collector *ipmctlCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- collector.fwErrorCount
 	ch <- collector.unlatchedDirtyShutdownCount
 	ch <- collector.deviceDiscoveryInfo
-	ch <- collector.deviceSecurityCapabilitiesInfo
 	ch <- collector.deviceCapabilitiesInfo
 	ch <- collector.ipmctlExporterInfo
 	if collector.enableThresholds {
@@ -263,8 +259,6 @@ func (collector *ipmctlCollector) Collect(ch chan<- prometheus.Metric) {
 	addMetric(ch, collector.totalWriteRequests, prometheus.CounterValue, totalWriteRequests)
 	deviceDiscoveryInfo := reader.GetDeviceDiscoveryInfo()
 	addMetric(ch, collector.deviceDiscoveryInfo, prometheus.GaugeValue, deviceDiscoveryInfo)
-	deviceSecurityCapabilitiesInfo := reader.GetDeviceSecurityCapabilitiesInfo()
-	addMetric(ch, collector.deviceSecurityCapabilitiesInfo, prometheus.GaugeValue, deviceSecurityCapabilitiesInfo)
 	deviceCapabilitiesInfo := reader.GetDeviceCapabilitiesInfo()
 	addMetric(ch, collector.deviceCapabilitiesInfo, prometheus.GaugeValue, deviceCapabilitiesInfo)
 	ipmctlExporterInfo, ieInfoError := nvm.GetIpmctlExporterInfo()

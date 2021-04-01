@@ -75,16 +75,6 @@ func newSensorSettings(cValue C.struct_sensor_settings) *sensorSettings {
 	return sensorSettings
 }
 
-func newDeviceSecurityCapabilities(cValue C.struct_device_security_capabilities) *deviceSecurityCapabilities {
-	devSecCap := new(deviceSecurityCapabilities)
-	devSecCap.passphraseCapable = makeNVMBool(cValue.passphrase_capable)
-	devSecCap.unlockDeviceCapable = makeNVMBool(cValue.unlock_device_capable)
-	devSecCap.eraseCryptoCapable = makeNVMBool(cValue.erase_crypto_capable)
-	devSecCap.masterPassphraseCapable = makeNVMBool(cValue.master_passphrase_capable)
-	copy(devSecCap.reserved[:], makeNVMUint8Array(cValue.reserved[:]))
-	return devSecCap
-}
-
 func newDeviceCapabilities(cValue C.struct_device_capabilities) *deviceCapabilities {
 	devCap := new(deviceCapabilities)
 	devCap.packageSparingCapable = makeNVMBool(cValue.package_sparing_capable)
@@ -122,7 +112,6 @@ func newDeviceDiscovery(cValue C.struct_device_discovery) *deviceDiscovery {
 	devDisc.fwAPIVersion = nvmVersion(C.GoString(&cValue.fw_api_version[0]))
 	devDisc.capacity = nvmUint64(cValue.capacity)
 	copy(devDisc.interfaceFormatCodes[:], makeNVMUint16Array(cValue.interface_format_codes[:]))
-	devDisc.securityCapabilities = *newDeviceSecurityCapabilities(cValue.security_capabilities)
 	devDisc.deviceCapabilities = *newDeviceCapabilities(cValue.device_capabilities)
 	devDisc.uid = nvmUID(C.GoString(&cValue.uid[0]))
 	devDisc.lockState = lockStateEnumAttr(cValue.lock_state)

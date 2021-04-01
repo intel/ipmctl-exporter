@@ -569,6 +569,33 @@ func GetFwErrLogStats(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceErrorLogSt
 	return opstat, deviceErrorLogStatus{}, fmt.Errorf("method is not implemented")
 }
 
+// GetNumberOfEffectLogEntries - stubbed - implement if needed
+func GetNumberOfEffectLogEntries(deviceUID nvmUID) (nvmStatusCodeEnumAttr, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, count, fmt.Errorf("method is not implemented")
+}
+
+// GetCommandEffectLog - stubbed - implement if needed
+func GetCommandEffectLog(deviceUID nvmUID) (nvmStatusCodeEnumAttr, []commandEffectLog, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	return opstat, []commandEffectLog{}, fmt.Errorf("method is not implemented")
+}
+
+// GetCommandAccessPolicy - stubbed - implement if needed
+func GetCommandAccessPolicy(deviceUID nvmUID) (nvmStatusCodeEnumAttr, []commandAccessPolicy, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, []commandAccessPolicy{}, count, fmt.Errorf("method is not implemented")
+}
+
+// GetNumberOfCapEntries - stubbed - implement if needed
+func GetNumberOfCapEntries(deviceUID nvmUID) (nvmStatusCodeEnumAttr, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, count, fmt.Errorf("method is not implemented")
+}
+
 // SyncLockAPI - stubbed - implement if needed
 func SyncLockAPI() {
 }
