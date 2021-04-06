@@ -57,7 +57,7 @@ func (reader *MetricsReader) GetRequiredReadings() (bool, error) {
 		return false, err
 	}
 	for i := 0; i < int(reader.deviceCount); i++ {
-		reader.devices[i].uid = discoveries[i].uid
+		reader.devices[i].uid = nvmUID("8089-a2-1938-00001bf4")
 		reader.devices[i].discovery = discoveries[i]
 		reader.devices[i].performanceOpstat, reader.devices[i].performance, _ = GetDevicePerformance(discoveries[i].uid)
 		for j := sensorTypeEnum.sensorHealth; j < NumberOfAvailableSensors; j++ {
