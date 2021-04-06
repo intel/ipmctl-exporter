@@ -311,56 +311,6 @@ func SetSensorSettings(deviceUID nvmUID,
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
-// SetPassphrase - stubbed - implement if needed
-func SetPassphrase(deviceUID nvmUID,
-	oldPassphrase nvmPassphrase,
-	oldPassphraseLen nvmSize,
-	newPassphrase nvmPassphrase,
-	newPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// RemovePassphrase - stubbed - implement if needed
-func RemovePassphrase(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// UnlockDevice - stubbed - implement if needed
-func UnlockDevice(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// FreezelockDevice - stubbed - implement if needed
-func FreezelockDevice(deviceUID nvmUID) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// EraseDevice - stubbed - implement if needed
-func EraseDevice(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// SetMasterPassphrase - stubbed - implement if needed
-func SetMasterPassphrase(deviceUID nvmUID,
-	oldMasterPassphrase nvmPassphrase,
-	oldMasterPassphraseLen nvmSize,
-	newMasterPassphrase nvmPassphrase,
-	newMasterPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
 // GetNumberOfEvents - stubbed - implement if needed
 func GetNumberOfEvents(filter eventFilter) (nvmStatusCodeEnumAttr, int, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported

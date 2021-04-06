@@ -522,7 +522,7 @@ type (
 		capacity                  nvmUint64
 		memoryCapacity            nvmUint64
 		appDirectoryCapacity      nvmUint64
-		mirroredAPPDirectCapacity nvmUint64
+		reserved1                 nvmUint64
 		unconfiguredCapacity      nvmUint64
 		inaccessibleCapacity      nvmUint64
 		reservedCapacity          nvmUint64
@@ -761,7 +761,6 @@ type (
 		interleaveTypeDefault        interleaveTypeEnumAttr
 		interleaveTypeInterleaved    interleaveTypeEnumAttr
 		interleaveTypeNotInterleaved interleaveTypeEnumAttr
-		interleaveTypeMirrored       interleaveTypeEnumAttr
 	}
 	configGoalStatusEnumAttr enumAttr
 	configGoalStatus         struct {
@@ -1119,7 +1118,6 @@ var (
 		regionTypeUnknown:          0,
 		regionTypePersistent:       1,
 		regionTypeVolatile:         2,
-		regionTypePersistentMirror: 3,
 	}
 	diagnosticResultEnum = &diagnosticResult{
 		diagnosticResultUnknown: 0,
@@ -1257,6 +1255,7 @@ var (
 		memoryTypeUnknown: 0,
 		memoryTypeDDR4:    1,
 		memoryTypeNVMDIMM: 2,
+		memoryTypeDDR5:    3,
 	}
 	osTypeEnum = &osType{
 		osTypeUnknown: 0,
