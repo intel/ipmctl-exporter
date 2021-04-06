@@ -226,6 +226,7 @@ type (
 		memoryTypeUnknown memoryTypeEnumAttr
 		memoryTypeDDR4    memoryTypeEnumAttr
 		memoryTypeNVMDIMM memoryTypeEnumAttr
+		memoryTypeDDR5    memoryTypeEnumAttr
 	}
 	host struct {
 		name         string
