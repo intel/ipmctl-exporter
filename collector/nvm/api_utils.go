@@ -183,6 +183,8 @@ func getMemoryTypeName(memType memoryTypeEnumAttr) string {
 		return "ddr4"
 	case memoryTypeEnum.memoryTypeNVMDIMM:
 		return "nvm"
+	case memoryTypeEnum.memoryTypeDDR5:
+		return "ddr5"
 	}
 	return "unknown"
 }

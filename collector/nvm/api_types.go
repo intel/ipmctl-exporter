@@ -226,6 +226,7 @@ type (
 		memoryTypeUnknown memoryTypeEnumAttr
 		memoryTypeDDR4    memoryTypeEnumAttr
 		memoryTypeNVMDIMM memoryTypeEnumAttr
+		memoryTypeDDR5    memoryTypeEnumAttr
 	}
 	host struct {
 		name         string
@@ -522,7 +523,7 @@ type (
 		capacity                  nvmUint64
 		memoryCapacity            nvmUint64
 		appDirectoryCapacity      nvmUint64
-		mirroredAPPDirectCapacity nvmUint64
+		reserved1                 nvmUint64
 		unconfiguredCapacity      nvmUint64
 		inaccessibleCapacity      nvmUint64
 		reservedCapacity          nvmUint64
@@ -726,7 +727,6 @@ type (
 		regionTypeUnknown          regionTypeEnumAttr
 		regionTypePersistent       regionTypeEnumAttr
 		regionTypeVolatile         regionTypeEnumAttr
-		regionTypePersistentMirror regionTypeEnumAttr
 	}
 	regionHealthEnumAttr enumAttr
 	regionHealth         struct {
@@ -853,6 +853,16 @@ type (
 		jType           nvmJobType
 		result          interface{}
 		reserved        [64]nvmUint8
+	}
+	commandEffectLog struct {
+		opcode          nvmUint32
+		effects         nvmUint32
+	  
+	}
+	commandAccessPolicy struct {
+        opcode                nvmUint8
+        sub_opcode            nvmUint8
+        restriction           nvmUint8
 	}
 	devicePTCmd struct {
 		opcode                 nvmUint8
@@ -1111,7 +1121,6 @@ var (
 		regionTypeUnknown:          0,
 		regionTypePersistent:       1,
 		regionTypeVolatile:         2,
-		regionTypePersistentMirror: 3,
 	}
 	diagnosticResultEnum = &diagnosticResult{
 		diagnosticResultUnknown: 0,
@@ -1249,6 +1258,7 @@ var (
 		memoryTypeUnknown: 0,
 		memoryTypeDDR4:    1,
 		memoryTypeNVMDIMM: 2,
+		memoryTypeDDR5:    3,
 	}
 	osTypeEnum = &osType{
 		osTypeUnknown: 0,

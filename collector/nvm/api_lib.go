@@ -311,56 +311,6 @@ func SetSensorSettings(deviceUID nvmUID,
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
-// SetPassphrase - stubbed - implement if needed
-func SetPassphrase(deviceUID nvmUID,
-	oldPassphrase nvmPassphrase,
-	oldPassphraseLen nvmSize,
-	newPassphrase nvmPassphrase,
-	newPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// RemovePassphrase - stubbed - implement if needed
-func RemovePassphrase(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// UnlockDevice - stubbed - implement if needed
-func UnlockDevice(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// FreezelockDevice - stubbed - implement if needed
-func FreezelockDevice(deviceUID nvmUID) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// EraseDevice - stubbed - implement if needed
-func EraseDevice(deviceUID nvmUID,
-	passphrase nvmPassphrase,
-	passphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
-// SetMasterPassphrase - stubbed - implement if needed
-func SetMasterPassphrase(deviceUID nvmUID,
-	oldMasterPassphrase nvmPassphrase,
-	oldMasterPassphraseLen nvmSize,
-	newMasterPassphrase nvmPassphrase,
-	newMasterPassphraseLen nvmSize) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
 // GetNumberOfEvents - stubbed - implement if needed
 func GetNumberOfEvents(filter eventFilter) (nvmStatusCodeEnumAttr, int, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
@@ -512,12 +462,6 @@ func SetUserPreferences(key nvmPreferenceKey,
 	return opstat, fmt.Errorf("Method is not implemented")
 }
 
-// ClearDimmLsa - stubbed - implement if needed
-func ClearDimmLsa(deviceUID nvmUID) (nvmStatusCodeEnumAttr, error) {
-	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
-	return opstat, fmt.Errorf("Method is not implemented")
-}
-
 // DebugLoggingEnabled - stubbed - implement if needed
 func DebugLoggingEnabled() (nvmStatusCodeEnumAttr, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
@@ -567,6 +511,33 @@ func GetFwErrorLogEntryCmd(deviceUID nvmUID,
 func GetFwErrLogStats(deviceUID nvmUID) (nvmStatusCodeEnumAttr, deviceErrorLogStatus, error) {
 	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
 	return opstat, deviceErrorLogStatus{}, fmt.Errorf("method is not implemented")
+}
+
+// GetNumberOfEffectLogEntries - stubbed - implement if needed
+func GetNumberOfEffectLogEntries(deviceUID nvmUID) (nvmStatusCodeEnumAttr, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, count, fmt.Errorf("method is not implemented")
+}
+
+// GetCommandEffectLog - stubbed - implement if needed
+func GetCommandEffectLog(deviceUID nvmUID) (nvmStatusCodeEnumAttr, []commandEffectLog, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	return opstat, []commandEffectLog{}, fmt.Errorf("method is not implemented")
+}
+
+// GetCommandAccessPolicy - stubbed - implement if needed
+func GetCommandAccessPolicy(deviceUID nvmUID) (nvmStatusCodeEnumAttr, []commandAccessPolicy, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, []commandAccessPolicy{}, count, fmt.Errorf("method is not implemented")
+}
+
+// GetNumberOfCapEntries - stubbed - implement if needed
+func GetNumberOfCapEntries(deviceUID nvmUID) (nvmStatusCodeEnumAttr, nvmUint32, error) {
+	opstat := nvmStatusCodeEnum.nvmErrAPINotSupported
+	count := nvmUint32(0)
+	return opstat, count, fmt.Errorf("method is not implemented")
 }
 
 // SyncLockAPI - stubbed - implement if needed
